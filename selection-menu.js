@@ -57,7 +57,7 @@
             span.id = instance.id;
 
             // Prevent selecting the text of the menu
-            span.style.webkitUserSelect = span.style.webkitTouchCallout = span.style.mozUserSelect = span.style.msUserSelect = 'none';
+            span.style.webkitUserSelect = span.style.webkitTouchCallout = span.style.MozUserSelect = span.style.msUserSelect = 'none';
             span.setAttribute('unselectable', 'on');  // legacy IE - https://msdn.microsoft.com/en-us/library/hh801966%28v=vs.85%29.aspx
 
             // Absolute positioning is required
