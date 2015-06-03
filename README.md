@@ -4,6 +4,8 @@ SelectionMenu is a small, self-contained, framework-agnostic JavaScript module t
 
 This menu may offer a search feature, dictionary lookup, post to Facebook or similar.
 
+**[Live Demo](http://idorecall.github.io/selectionmenu/)**
+
 
 ## History
 
@@ -62,7 +64,7 @@ looked up on Google or Bing.
 ```js
 new SelectionMenu({
   container: document.getElementById('article'),
-  menuHTML: '<a id="selection-menu-google">Google Search</a><a id="selection-menu-bing">Bing Search</a>',
+  menuHTML: '<a id="selection-menu-google">Google it</a><a id="selection-menu-bing">Bing</a>',
   handler: function (e) {
     var target = e.target,
       id = target.id,
@@ -71,7 +73,7 @@ new SelectionMenu({
       searchURI;
     
     if (id === 'selection-menu-google') {
-      searchURI = 'http://www.google.com/search?ie=utf-8&q=';
+      searchURI = 'http://www.google.com/search?q=';
     } else if (id === 'selection-menu-bing') {
       searchURI = 'http://www.bing.com/search?q=';
     }
@@ -104,7 +106,8 @@ new SelectionMenu({
 
 ## Upcoming features
 
-* automatically position menu to preserve width if created near the right border of the container, and not go off screen if the selection is made near the very top
+* Automatically align right the menu if created near the right border of the container
+* Keep menu on-screen if the selection is made near the very top
 
 
 ## License and copyright
