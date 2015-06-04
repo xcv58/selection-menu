@@ -16,6 +16,7 @@
 }
 
 #selection-menu li {
+    cursor: pointer;
     display: inline-block;
     padding: .75em 1em;
     border-left: 3px solid #666666;
