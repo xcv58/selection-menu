@@ -1,6 +1,6 @@
 # SelectionMenu
 
-SelectionMenu is a small, self-contained, framework-agnostic JavaScript module that displays a custom context menu when the user selects text text on the page.
+SelectionMenu is a small, self-contained, framework-agnostic JavaScript module that displays a custom context menu when the user selects text on the page.
 
 This menu may offer a search feature, dictionary lookup, post to Facebook or similar.
 
