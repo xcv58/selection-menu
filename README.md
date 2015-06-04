@@ -4,7 +4,7 @@ SelectionMenu is a small, self-contained, framework-agnostic JavaScript module t
 
 This menu may offer a search feature, dictionary lookup, post to Facebook or similar.
 
-**[Live Demo](http://idorecall.github.io/selectionmenu/)**
+**[Live Demo](http://idorecall.github.io/selection-menu/)**
 
 
 ## History
@@ -52,6 +52,8 @@ Pass an object literal with the following options:
       }
     });
     ```
+
+The menu styling is completely up to you. See the `selection-menu.css` in the demos for an example.
 
 
 ## Example

@@ -1,108 +1,96 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>SelectionMenu Example</title>
-<link rel="stylesheet" href="index.css">
-<style>
-body {
-  font: 16px/1.5 arial, sans-serif;
-  background: rgb(251, 251, 253);
-}
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>JavaScript context menu on selection by iDoRecall</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="demos/gh-pages/stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="demos/gh-pages/stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="demos/gh-pages/stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="demos/gh-pages/selection-menu.css" media="screen">
+  </head>
+  <body>
+  
+    <div id="mymenu" hidden>
+      <a id="selection-menu-google">Google search for foo</a>
+      <a id="selection-menu-bing">Bing search for foo</a>
+    </div>
+    
+    <script src="src/selection-menu.js"></script>
 
-/* center the text horizontally */
-#wrapper {
-  margin: auto;
-  max-width: 40em;
-  position: relative;
-}
+    <script>
+    window.addEventListener('load', function () {
 
-/* so that the selection doesn't extend over the margins */
-#article {
-  position: absolute;
-}
-</style>
+      new SelectionMenu({
+        container: document.getElementsByClassName('main-content')[0],
+        id: 'selection-menu',
+        menuHTML: document.querySelector('#mymenu').innerHTML,
+        onselect: function (e) {
+          var truncatedText = this.selectedText.replace(/\s+/g, ' ');
+          if (truncatedText.length > 30)
+            truncatedText = truncatedText.slice(0, 30) + '...';
 
-<script src="selection-menu.js"></script>
+          this.menuHTML = this.menuHTML.replace(/ search for .*/g, ' search for <i>' + truncatedText + '</i></a>');
+        },
+        handler: function (e) {
+          var target = e.target || e.srcElement,
+            id = target.id,
+            selectedText = this.selectedText,
+            query = encodeURI(selectedText.replace(/\s/g, '+')),
+            searchURI;
 
-<script>
-window.addEventListener('load', function () {
+          if (id == 'selection-menu-google') {
+            searchURI = 'http://www.google.com/search?q=';
+          } else if (id == 'selection-menu-bing') {
+            searchURI = 'http://www.bing.com/search?q=';
+          }
 
-  new SelectionMenu({
-    container: document.getElementById('article'),
-    id: 'selection-menu',
-    menuHTML: document.querySelector('#mymenu').innerHTML,
-    onselect: function (e) {
-      var truncatedText = this.selectedText.replace(/\s+/g, ' ');
-      if (truncatedText.length > 30)
-        truncatedText = truncatedText.slice(0, 30) + '...';
-        
-      this.menuHTML = this.menuHTML.replace(/ search for .*/g, ' search for <i>' + truncatedText + '</i></a>');
-    },
-    handler: function (e) {
-      var target = e.target || e.srcElement,
-        id = target.id,
-        selectedText = this.selectedText,
-        query = encodeURI(selectedText.replace(/\s/g, '+')),
-        searchURI;
+          location.href = searchURI + query;
+        }
+      });
 
-      if (id == 'selection-menu-google') {
-        searchURI = 'http://www.google.com/search?q=';
-      } else if (id == 'selection-menu-bing') {
-        searchURI = 'http://www.bing.com/search?q=';
-      }
+    });
+    </script>
+  
+  
+    <section class="page-header">
+      <h1 class="project-name">JavaScript context menu on selection</h1>
+      <h2 class="project-tagline">Automatically pop over a context menu when the user selects text</h2>
+      <a href="https://github.com/iDoRecall/selection-menu" class="btn">View on GitHub</a>
+      <a href="https://github.com/iDoRecall/selection-menu/zipball/gh-pages" class="btn">Download .zip</a>
+    </section>
 
-      location.href = searchURI + query;
-    }
-  });
+    <section class="main-content">
+      <h1>
+        <a id="selectionmenu" class="anchor" href="#selectionmenu" aria-hidden="true"><span class="octicon octicon-link"></span></a>SelectionMenu
+      </h1>
 
-});
-</script>
-</head>
-<body>
+      <p>SelectionMenu is a small, self-contained, framework-agnostic JavaScript module that displays a custom context menu when the user selects text on the page.</p>
+      
+      <p>This menu may offer a search feature, dictionary lookup, post to Facebook or similar.</p>
+      
+      <p>Select some text with the mouse or by tapping!</p>
+      
+      <p>Now try selecting the other way (e.g. right to left)!</p>
+      
+      <p>Notice how the popover menu conveniently appears where you finished the selection.</p>
+      
+      <p>Only selections at least 5 characters long trigger the menu. Try selecting this <i>word</i>.</p>
 
-<div id="mymenu" hidden>
-<a id="selection-menu-google">Google search for foo</a>
-<a id="selection-menu-bing">Bing search for foo</a>
-</div>
+      <h2>Documentation</h2>
+      
+      <p>Please see the README in the GitHub repo.</p>
 
-<div id="wrapper">
-<div id="article">
-<h1>SelectionMenu</h1>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/iDoRecall/selection-menu">JavaScript context menu on selection</a> is maintained by <a href="https://github.com/iDoRecall">iDoRecall</a>.</span>
 
-<p>Select some text with the mouse or by tapping!</p>
+        <span class="site-footer-credits">Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
 
-<p>Now try selecting the other way (e.g. right to left)!</p>
+    </section>
 
-<p>Notice how the popover menu conveniently appears where you finished the selection.</p>
 
-<p>Only selections at least 5 characters long trigger the menu. Try selecting this <i>word</i>.</p>
-
-<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-<p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-
-<p>Ut wisi enim ad minim veniam, quis nostrud exerci <a href="#">tation</a> ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
-
-<h2>Codicil</h2>
-
-<p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna <b>aliquam</b> erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-
-<p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-
-<ul>
-<li>At vero eos et accusam et justo duo dolores et ea rebum.</li>
-<li>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</li>
-<li>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt</li>
-<li>ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</li>
-</ul>
-
-<p>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
-
-<p>Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-
-</div>
-</div>
-
-</body>
+  </body>
 </html>
+

@@ -1,5 +1,5 @@
 /**!
- * SelectionMenu 2.0
+ * SelectionMenu 2.0.1
  *
  * Displays a context menu when the user selects some text on the page
  * https://github.com/idorecall/selectionmenu (fork of http://github.com/molily/selectionmenu)

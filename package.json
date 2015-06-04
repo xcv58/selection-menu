@@ -1,0 +1,26 @@
+{
+  "name": "selection-menu",
+  "version": "2.0.1",
+  "description": "Display a context menu after the user selects text",
+  "main": "src/selection-menu.js",
+  "scripts": {
+    "test": "demos/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iDoRecall/selection-menu.git"
+  },
+  "keywords": [
+    "selection",
+    "context",
+    "menu",
+    "popover",
+    "JavaScript"
+  ],
+  "author": "Dan Dascalescu @ iDoRecall",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iDoRecall/selection-menu/issues"
+  },
+  "homepage": "https://github.com/iDoRecall/selection-menu"
+}
