@@ -28,6 +28,7 @@ The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-R
 * Clicking outside the popover *always* closes the menu (fixes [selection-sharer #11](https://github.com/xdamman/selection-sharer/issues/11))
 * `onselect` event
 * Dynamic menu depending on the content of the selection
+* Selection and menu are preserved when scrolling the document via the scrollbar thumb
 
 
 ## Usage
@@ -105,6 +106,14 @@ new SelectionMenu({
   }
 });
 ```
+
+
+## Known issues
+
+* You have to set the `min-width` of the menu manually for now
+* In IE10, double clicking and triple clicking to select a word/paragraph no longer work
+* [Triple clicking to select a paragraph](https://github.com/molily/selectionmenu/issues/9) lands the menu below the selection
+
 
 ## Upcoming features
 

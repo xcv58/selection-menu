@@ -1,0 +1,60 @@
+#selection-menu {
+    font: 20px/100% Roboto, sans-serif;
+    background: #464646;
+    color: white;
+    text-transform: uppercase;
+    position: relative;
+    padding: 0;
+    min-width: 388px;
+}
+
+#selection-menu ul {
+    list-style-type: none;
+    display: flex;  /* gets rid of the space between inline-block elements: https://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
+    margin: 0;
+    padding: 0;
+}
+
+#selection-menu li {
+    display: inline-block;
+    padding: .75em 1em;
+    border-left: 3px solid #666666;
+}    
+
+#selection-menu li:first-child {
+    border: none;
+    padding: 0 .4em;  /* or padding 0 & margin auto .4em but the hover selection is smaller */
+    margin: auto;
+    align-self: center;  /* For IE10; Chrome acts correctly on margin+padding alone */
+}
+
+#selection-menu li a {
+    display: inline-block;
+}    
+
+#selection-menu img {
+    width: 37px;
+}
+
+#selection-menu:hover {
+    color: #B3B3B3;
+}
+
+#selection-menu li:hover {
+    background: #3FA9F5;
+    color: white;
+}
+
+#selection-menu:hover li {
+    border-color: #CCCCCC;
+}
+
+#selection-menu:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 28px 20px 0 0;
+    border-color: #464646 transparent;
+    width: 0;
+    z-index: 1;
+}

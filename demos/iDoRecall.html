@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SelectionMenu Example</title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="iDoRecall-menu.css">
+  <style>
+  body {
+    font: 16px/1.5 arial, sans-serif;
+    background: rgb(251, 251, 253);
+  }
+  
+  /* center the text horizontally */
+  #wrapper {
+    margin: auto;
+    max-width: 40em;
+    position: relative;
+  }
+  
+  /* so that the selection doesn't extend over the margins */
+  #article {
+    position: absolute;
+  }
+  </style>
+
+</head>
+<body>
+
+  <div id="mymenu" hidden>
+    <ul>
+      <li id="idr-home"><a target="IDR" href="http://idorecall.com"><img src="iDR_128x90_light_on_transparent.png"></a></li>
+      <li id="create-new-recall" style="padding-left: .5em; padding-right: .5em">Create new <strong>recall</strong></li>
+      <li id="create-new-recall"><strong>Q</strong></li>
+      <li id="create-new-recall"><strong>A</strong></li>
+    </ul>
+  </div>
+  
+  <script src="../src/selection-menu.js"></script>
+  
+  <script>
+  window.addEventListener('load', function () {
+  
+    new SelectionMenu({
+      container: document.getElementById('article'),
+      id: 'selection-menu',
+      menuHTML: document.querySelector('#mymenu').innerHTML,
+      onselect: function (e) {
+        var truncatedText = this.selectedText.replace(/\s+/g, ' ');
+        if (truncatedText.length > 30)
+          truncatedText = truncatedText.slice(0, 30) + '...';
+          
+        this.menuHTML = this.menuHTML.replace(/ search for .*/g, ' search for <i>' + truncatedText + '</i></a>');
+      },
+      handler: function (e) {
+        var target = e.target,
+          id = target.id,
+          selectedText = this.selectedText
+        ;
+        console.log('Handling click');
+        this.hide(e, true);
+      }
+    });
+  
+  });
+  </script>
+  
+  <div id="wrapper">
+    <div id="article">
+    <h1>SelectionMenu</h1>
+    
+    <p>Select some text with the mouse or by tapping!</p>
+    
+    <p>Now try selecting the other way (e.g. right to left)!</p>
+    
+    <p>Notice how the popover menu conveniently appears where you finished the selection.</p>
+    
+    <p>Only selections at least 5 characters long trigger the menu. Try selecting this <i>word</i>.</p>
+    
+    <p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    
+    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+    
+    <p>Ut wisi enim ad minim veniam, quis nostrud exerci <a href="#">tation</a> ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+    
+    <h2>Codicil</h2>
+    
+    <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna <b>aliquam</b> erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+    
+    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
+    
+    <ul>
+    <li>At vero eos et accusam et justo duo dolores et ea rebum.</li>
+    <li>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</li>
+    <li>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt</li>
+    <li>ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</li>
+    </ul>
+    
+    <p>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
+    
+    <p>Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    
+    </div>
+  </div>
+
+</body>
+</html>

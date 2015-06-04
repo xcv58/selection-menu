@@ -1,5 +1,5 @@
 /**!
- * SelectionMenu 2.0.1
+ * SelectionMenu 2.0.2
  *
  * Displays a context menu when the user selects some text on the page
  * https://github.com/idorecall/selectionmenu (fork of http://github.com/molily/selectionmenu)
@@ -154,7 +154,7 @@
             var container = instance.container;
 
             // Hide the menu on mouse down *anywhere* because the browser will clear the selection
-            document.addEventListener('mousedown', function (e) {
+            document.body.addEventListener('mousedown', function (e) {
                 instance.hide(e);
             });
 
@@ -173,10 +173,12 @@
             instance.setupMenuEvents();
         },
 
-        hide: function (e) {
+        hide: function (e, force) {
             // Abort if an event object was passed and the click hit the menu itself
-            if (e && mouseOnMenu(e))
+            // because the caller should handle clicks and hiding (via the force parameter)
+            if (e && mouseOnMenu(e) && !force) {
                 return;
+            }    
 
             // Is the element attached to the DOM tree?
             var parent = span.parentNode;
@@ -185,6 +187,8 @@
                 parent.removeChild(span);
                 // The element object remains in memory and will be reused later
             }
+            // Clear the selection just in case (e.g. if the user clicked the scrollbar, or a link in a menu that opened a new tab
+            window.getSelection().removeAllRanges();
         },
 
         hideIfNoSelection: function () {
@@ -196,6 +200,12 @@
 
         position: function () {
             span.style.marginTop = -(span.offsetHeight + 5) + 'px';
+            // TODO: make sure the menu stays wide enough if called near the edge
+/*            span.style.minWidth = 'some invalid value';  // this seems to force a recalculation
+            span.style.minWidth = span.offsetWidth + 'px'; // increases margin values */
+            // TODO move to the left, calculate offsetWidth, move to where it should be
+            // span.style.left = left + 'px';
+            // span.style.display = 'block';
         }
     };
 
