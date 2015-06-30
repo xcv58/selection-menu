@@ -9,13 +9,13 @@ This menu may offer a search feature, dictionary lookup, post to Facebook or sim
 
 ## History
 
-The motivation for creating this module was having a sleek contextual selection mechanism in the Chrome extension for [iDoRecall](http://idorecall.com). 
+The motivation for creating this module was having a sleek contextual selection mechanism in the Chrome extension for [iDoRecall](https://idorecall.com). 
 
-This module is largely my fork of [Mathias Schäfer](https://github.com.molily)'s work from 2011, brought up to date with modern browsers (Chrome, Firefox, Safari, Opera, IE9+) and the AMD module pattern. [Xavier Damman](https://github.com/xdamman/)'s [selection-sharer](https://github.com/xdamman/selection-sharer) was another influence (detecting the forward vs. backward selection direction).
+This module is largely my fork of [Mathias Schäfer's work from 2011](https://github.com/molily/selectionmenu), brought up to date with modern browsers (Chrome, Firefox, Safari, Opera, IE9+) and the AMD module pattern. [Xavier Damman](https://github.com/xdamman/)'s [selection-sharer](https://github.com/xdamman/selection-sharer) was another influence (detecting the forward vs. backward selection direction).
 
 The idea and the implementation originally resemble the selection context menu on nytimes.com, but the script is way simpler and easier to integrate. 
 
-The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html), which is available in modern browsers: IE9+, Chrome, Firefox, Safari, Opera.
+The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html), which is [available in modern browsers](https://developer.mozilla.org/en-US/docs/Web/API/Range): IE9+, Chrome, Firefox, Safari, Opera.
 
 
 ## Features and differences from the original
