@@ -45,13 +45,6 @@
       container: document.getElementById('article'),
       id: 'selection-menu',
       menuHTML: document.querySelector('#mymenu').innerHTML,
-      onselect: function (e) {
-        var truncatedText = this.selectedText.replace(/\s+/g, ' ');
-        if (truncatedText.length > 30)
-          truncatedText = truncatedText.slice(0, 30) + '...';
-          
-        this.menuHTML = this.menuHTML.replace(/ search for .*/g, ' search for <i>' + truncatedText + '</i></a>');
-      },
       handler: function (e) {
         var target = e.target,
           id = target.id,

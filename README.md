@@ -2,7 +2,7 @@
 
 SelectionMenu is a small, self-contained, framework-agnostic JavaScript module that displays a custom context menu when the user selects text on the page.
 
-This menu may offer a search feature, dictionary lookup, post to Facebook or similar.
+This menu may offer a search feature, dictionary lookup, share on social media, or similar.
 
 **[Live Demo](http://idorecall.github.io/selection-menu/)**
 
@@ -43,7 +43,7 @@ Pass an object literal with the following options:
 * `minlength` (number, optional): Only display the menu if the selected text has at least this length. Defaults to 5 characters.
 * `maxlength` (number, optional): Only display the menu if the selected text is at most this long. Defaults to `Infinity`.
 * `id` (string, optional): The ID of the menu element which is inserted. Defaults to `selection-menu`.
-* `onselect` (function, optional): Custom event generated when the mouse selection changes. Not generated when the selection is changed via the keyboard. Use it to customize the menu dynamically based on the contents of the selection:
+* `onselect` (function, optional): Custom event generated when the mouse/finger selection changes. Not generated when the selection is changed via the keyboard. Use it to customize the menu dynamically based on the contents of the selection:
 
     ```js
     new SelectionMenu({

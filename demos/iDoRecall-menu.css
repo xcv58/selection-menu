@@ -46,10 +46,6 @@
     color: white;
 }
 
-#selection-menu:hover li {
-    border-color: #CCCCCC;
-}
-
 #selection-menu:after {
     content: '';
     position: absolute;

@@ -103,10 +103,8 @@
             // Call the onselect handler to give it a chance to modify the menu
             instance.onselect && instance.onselect.call(instance, e);
 
-            // Fill the menu span
-            var range = window.getSelection().getRangeAt(0);
-
             // Get the start and end nodes of the selection
+            var range = window.getSelection().getRangeAt(0);
             var startNode = range.startContainer;
             var endNode = range.endContainer;
 
@@ -142,7 +140,7 @@
             // Fill the menu span
             span.innerHTML = instance.menuHTML;
 
-            // Inject the span element into the new Range
+            // Inject the span element at the start of the new Range
             newRange.insertNode(span);
 
             // Menu positioning
