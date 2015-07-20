@@ -4,7 +4,7 @@
   "description": "Display a context menu after the user selects text",
   "main": "src/selection-menu.js",
   "scripts": {
-    "test": "demos/index.html"
+    "test": "node tests/browserstack.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,12 @@
   "bugs": {
     "url": "https://github.com/iDoRecall/selection-menu/issues"
   },
-  "homepage": "https://github.com/iDoRecall/selection-menu"
+  "homepage": "https://github.com/iDoRecall/selection-menu",
+  "dependencies": {
+    "tether": "^1.0.3",
+    "tether-drop": "^1.2.1"
+  },
+  "devDependencies": {
+    "browserstack-webdriver": "^2.41.1"
+  }
 }

@@ -1,0 +1,15 @@
+# whitelist
+branches:
+  only:
+    - gh-pages
+
+language: node_js
+
+# http://docs.travis-ci.com/user/languages/javascript-with-nodejs/
+node_js:
+  - "0.10"
+  
+script:
+  # http://docs.travis-ci.com/user/languages/javascript-with-nodejs/#Default-Test-Script
+  - npm test
+  
