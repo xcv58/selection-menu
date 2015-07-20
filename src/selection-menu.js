@@ -116,10 +116,12 @@
             var popoverNode, popoverOffset;
             if (this.selectionDirection() === 'forward') {
                 popoverNode = endNode;
-                popoverOffset = range.endOffset
+                popoverOffset = range.endOffset;
+                // Chrome incorrectly sets the node to the *next* paragraph - https://code.google.com/p/chromium/issues/detail?id=511962
+                console.log('End node and offset:', popoverNode, popoverOffset);
             } else {
                 popoverNode = startNode;
-                popoverOffset = Math.max(range.startOffset - 1, 0);
+                popoverOffset = Math.max(range.startOffset, 0);
             }
 
             // If the end node is an element, use its last text node as the end offset
