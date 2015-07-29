@@ -1,57 +1,197 @@
-#selection-menu {
-    font: 20px/100% Roboto, sans-serif;
-    background: #464646;
-    color: white;
-    text-transform: uppercase;
-    position: relative;
-    padding: 0;
-    min-width: 388px;
+/* div. so as not to target the span.selection-menu that Drop creates */
+div.selection-menu {
+  font: 20px/100% Roboto, sans-serif;
+  background: #464646;
+  color: white;
+  text-transform: uppercase;
+  position: relative;
+  padding: 0;
+  min-width: 388px;
 }
-
-#selection-menu ul {
-    list-style-type: none;
-    display: flex;  /* gets rid of the space between inline-block elements: https://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
-    margin: 0;
-    padding: 0;
+div.selection-menu img {
+  width: 37px;
 }
-
-#selection-menu li {
-    cursor: pointer;
-    display: inline-block;
-    padding: .75em 1em;
-    border-left: 3px solid #666666;
-}    
-
-#selection-menu li:first-child {
-    border: none;
-    padding: 0 .4em;  /* or padding 0 & margin auto .4em but the hover selection is smaller */
-    margin: auto;
-    align-self: center;  /* For IE10; Chrome acts correctly on margin+padding alone */
+div.selection-menu:hover {
+  color: #B3B3B3;
 }
-
-#selection-menu li a {
-    display: inline-block;
-}    
-
-#selection-menu img {
-    width: 37px;
+div.selection-menu ul {
+  list-style-type: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  /* gets rid of the space between inline-block elements: https://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
+  margin: 0;
+  padding: 0;
 }
-
-#selection-menu:hover {
-    color: #B3B3B3;
+div.selection-menu li {
+  cursor: pointer;
+  display: inline-block;
+  padding: .75em 1em;
+  border-left: 3px solid #666666;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -moz-user-select: none;
 }
-
-#selection-menu li:hover {
-    background: #3FA9F5;
-    color: white;
+div.selection-menu li.shortcut {
+  font-weight: bold;
 }
-
-#selection-menu:after {
-    content: '';
-    position: absolute;
-    border-style: solid;
-    border-width: 28px 20px 0 0;
-    border-color: #464646 transparent;
-    width: 0;
-    z-index: 1;
+div.selection-menu li:first-child {
+  border: none;
+  padding: 0 .4em;
+  /* or padding 0 & margin auto .4em but the hover selection is smaller */
+  margin: auto;
+  -webkit-align-self: center;
+      -ms-flex-item-align: center;
+          align-self: center;
+  /* For IE10; Chrome acts correctly on margin+padding alone */
+}
+div.selection-menu li a {
+  display: inline-block;
+}
+div.selection-menu li:hover {
+  background: #3FA9F5;
+  color: white;
+}
+/* don't highlight the image */
+div.selection-menu li:first-child:hover {
+  background: transparent;
+}
+.drop-element,
+.drop-element:after,
+.drop-element:before,
+.drop-element *,
+.drop-element *:after,
+.drop-element *:before {
+  box-sizing: border-box;
+}
+.drop-element {
+  position: absolute;
+  display: none;
+}
+.drop-element.drop-open {
+  display: block;
+}
+.drop-element.drop-theme-idr {
+  max-width: 100%;
+  max-height: 100%;
+  background: transparent;
+}
+.drop-element.drop-theme-idr .drop-content {
+  position: relative;
+  background: #464646;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+}
+.drop-element.drop-theme-idr .drop-content:before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-width: 16px;
+  border-style: solid;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-center .drop-content {
+  margin-bottom: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-center .drop-content:before {
+  top: 100%;
+  left: 50%;
+  margin-left: -16px;
+  border-top-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-center .drop-content {
+  margin-top: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-center .drop-content:before {
+  bottom: 100%;
+  left: 50%;
+  margin-left: -16px;
+  border-bottom-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-right.drop-element-attached-middle .drop-content {
+  margin-right: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-right.drop-element-attached-middle .drop-content:before {
+  left: 100%;
+  top: 50%;
+  margin-top: -16px;
+  border-left-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-left.drop-element-attached-middle .drop-content {
+  margin-left: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-left.drop-element-attached-middle .drop-content:before {
+  right: 100%;
+  top: 50%;
+  margin-top: -16px;
+  border-right-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-bottom .drop-content {
+  margin-top: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-bottom .drop-content:before {
+  bottom: 100%;
+  left: 16px;
+  border-bottom-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-bottom .drop-content {
+  margin-top: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-bottom .drop-content:before {
+  bottom: 100%;
+  right: 16px;
+  border-bottom-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-top .drop-content {
+  margin-bottom: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-top .drop-content:before {
+  top: 100%;
+  left: 16px;
+  border-top-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-top .drop-content {
+  margin-bottom: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-top .drop-content:before {
+  top: 100%;
+  right: 16px;
+  border-top-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-left .drop-content {
+  margin-right: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-left .drop-content:before {
+  top: 16px;
+  left: 100%;
+  border-left-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-right .drop-content {
+  margin-left: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-right .drop-content:before {
+  top: 16px;
+  right: 100%;
+  border-right-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-left .drop-content {
+  margin-right: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-left .drop-content:before {
+  bottom: 16px;
+  left: 100%;
+  border-left-color: #464646;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-right .drop-content {
+  margin-left: 16px;
+}
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-right .drop-content:before {
+  bottom: 16px;
+  right: 100%;
+  border-right-color: #464646;
 }

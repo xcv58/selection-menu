@@ -1,4 +1,4 @@
-# whitelist
+# whitelist gh-pages explicitly, because it's not a default branch - http://docs.travis-ci.com/user/customizing-the-build/#Building-Specific-Branches
 branches:
   only:
     - gh-pages

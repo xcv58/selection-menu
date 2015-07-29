@@ -1,3 +1,4 @@
+// See https://www.browserstack.com/automate/node
 var webdriver = require('browserstack-webdriver');
 
 var capabilities = {

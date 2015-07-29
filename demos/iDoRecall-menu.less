@@ -1,0 +1,215 @@
+@arrowSize: 16px;
+@backgroundColor: #464646;
+
+/* div. so as not to target the span.selection-menu that Drop creates */
+
+div.selection-menu {
+    font: 20px/100% Roboto, sans-serif;
+    background: @backgroundColor;
+    color: white;
+    text-transform: uppercase;
+    position: relative;
+    padding: 0;
+    min-width: 388px;
+
+    img {
+        width: 37px;
+    }
+
+    &:hover {
+        color: #B3B3B3;
+    }
+}
+
+div.selection-menu ul {
+    list-style-type: none;
+    display: flex;  /* gets rid of the space between inline-block elements: https://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
+    margin: 0;
+    padding: 0;
+}
+
+div.selection-menu li {
+    cursor: pointer;
+    display: inline-block;
+    padding: .75em 1em;
+    border-left: 3px solid #666666;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+
+    &.shortcut {
+        font-weight: bold;
+    }
+
+    // the logo
+    &:first-child {
+        border: none;
+        padding: 0 .4em;  /* or padding 0 & margin auto .4em but the hover selection is smaller */
+        margin: auto;
+        align-self: center;  /* For IE10; Chrome acts correctly on margin+padding alone */
+    }
+
+    a {
+        display: inline-block;
+    }
+
+    &:hover {
+        background: #3FA9F5;
+        color: white;
+    }
+}
+
+
+/* don't highlight the image */
+div.selection-menu li:first-child:hover {
+    background: transparent;
+}
+
+.drop-element, .drop-element:after, .drop-element:before, .drop-element *, .drop-element *:after, .drop-element *:before {
+  box-sizing: border-box;
+}
+
+.drop-element {
+  position: absolute;
+  display: none;
+  &.drop-open {
+    display: block;
+  }
+}
+
+.drop-element.drop-theme-idr {
+  max-width: 100%;
+  max-height: 100%;
+  background: transparent;  // make the @arrowSize-d margins transparent and let the arrows show
+
+  .drop-content {
+    position: relative;
+    background: @backgroundColor;
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+            filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-color: transparent;
+      border-width: @arrowSize;
+      border-style: solid;
+    }
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-center .drop-content {
+  margin-bottom: @arrowSize;
+  &:before {
+    top: 100%;
+    left: 50%;
+    margin-left: -@arrowSize;
+    border-top-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-center .drop-content {
+  margin-top: @arrowSize;
+  &:before {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -@arrowSize;
+    border-bottom-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-right.drop-element-attached-middle .drop-content {
+  margin-right: @arrowSize;
+  &:before {
+    left: 100%;
+    top: 50%;
+    margin-top: -@arrowSize;
+    border-left-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-left.drop-element-attached-middle .drop-content {
+  margin-left: @arrowSize;
+  &:before {
+    right: 100%;
+    top: 50%;
+    margin-top: -@arrowSize;
+    border-right-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-bottom .drop-content {
+  margin-top: @arrowSize;
+  &:before {
+    bottom: 100%;
+    left: @arrowSize;
+    border-bottom-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-bottom .drop-content {
+  margin-top: @arrowSize;
+  &:before {
+    bottom: 100%;
+    right: @arrowSize;
+    border-bottom-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-top .drop-content {
+  margin-bottom: @arrowSize;
+  &:before {
+    top: 100%;
+    left: @arrowSize;
+    border-top-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-top .drop-content {
+  margin-bottom: @arrowSize;
+  &:before {
+    top: 100%;
+    right: @arrowSize;
+    border-top-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-left .drop-content {
+  margin-right: @arrowSize;
+  &:before {
+    top: @arrowSize;
+    left: 100%;
+    border-left-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-right .drop-content {
+  margin-left: @arrowSize;
+  &:before {
+    top: @arrowSize;
+    right: 100%;
+    border-right-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-left .drop-content {
+  margin-right: @arrowSize;
+  &:before {
+    bottom: @arrowSize;
+    left: 100%;
+    border-left-color: @backgroundColor;
+  }
+}
+
+.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-right .drop-content {
+  margin-left: @arrowSize;
+  &:before {
+    bottom: @arrowSize;
+    right: 100%;
+    border-right-color: @backgroundColor;
+  }
+}

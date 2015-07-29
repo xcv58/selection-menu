@@ -1,13 +1,13 @@
 /**!
- * SelectionMenu 2.0.2
+ * SelectionMenu 3.1.0
  *
  * Displays a context menu when the user selects some text on the page
- * https://github.com/idorecall/selectionmenu (fork of http://github.com/molily/selectionmenu)
+ * https://github.com/idorecall/selectionmenu
  *
- * @author	Mathias Schäfer (aka molily) http://molily.de/
+ * @author	[Dan Dascalescu](http://github.com/dandv) for iDoRecall
  * @license MIT
  *
- * Modernized by [Dan Dascalescu](http://github.com/dandv) for iDoRecall
+ * Inspired by work by Mathias Schäfer (aka molily) - http://github.com/molily/selectionmenu
  */
 
 // https://github.com/umdjs/umd/blob/master/amdWeb.js
@@ -19,12 +19,86 @@
     }
 }(this, function () {
 
-    // The menu element which is inserted when selecting text
-    var span = null;
+    /**
+     * Add the window scroll position to a rectangle
+     * @param rect
+     * @returns {{top: number, left: number, bottom: number, right: number, width: number, height: number}}
+     */
+    function addScroll(rect) {
+        return {
+            top: rect.top + window.pageYOffset,
+            left: rect.left + window.pageXOffset,
+            bottom: rect.bottom + window.pageYOffset,
+            right: rect.right + window.window.pageXOffset,
+            width: rect.width,
+            height: rect.height
+        }
+    }
 
-    function mouseOnMenu(e) {
-        // Is the target element the menu, or contained in it?
-        return e.target == span || span.contains(e.target);
+    /**
+     * Get the absolutely-positioned bounding rectangle (top, left, bottom, right, width, height) that contains the
+     * selection, even if the selection crosses nodes and its start and end have different parents. Takes scrolling
+     * into account.
+     * Note that the native window.getSelection().getRangeAt(0).getBoundingClientRect() overshoots towards the end
+     * if the selection spans nodes with different parents, e.g. a <p> and the next <h1>.
+     * Inspiration: http://stackoverflow.com/questions/6846230/coordinates-of-selected-text-in-browser-page/6847328#6847328
+     * See how Selection Range clientRects work at http://codepen.io/dandv/pen/bdxgVj
+     * @param sel
+     * @param {object} [options] - Return only the height (shortcuts going through all the rectangles that make uo
+     * the selection.
+     * @returns {object|number} The rectangle or the height
+     */
+    function getSelectionBoundingRect(sel, options) {
+        sel = sel || window.getSelection();
+        if (sel.rangeCount) {
+            var range = sel.getRangeAt(0);
+            if (range.getClientRects) {
+                var rectangles = range.getClientRects();  // https://developer.mozilla.org/en-US/docs/Web/API/Element/getClientRects
+                if (rectangles.length > 0) {
+                    var r0 = rectangles[0], rlast = rectangles[rectangles.length -1];
+                    var rect = addScroll({
+                        top: r0.top,
+                        left: r0.left,
+                        right: r0.right,
+                        bottom: rlast.bottom
+                    });
+                    rect.height = rect.bottom - rect.top;
+                    if (options.justHeight) return rect.height;
+                    // A 3-line selection may start at the last word in the line, continue with a full line, and end
+                    // after the first word of the next line. Its width is that of the middle line.
+                    for (var i = 1; i < rectangles.length; i++) {
+                        var ri = rectangles[i];
+                        if (ri.left < rect.left) rect.left = ri.left;
+                        if (ri.right > rect.right) rect.right = ri.right;
+                    }
+
+                    // Finally, calculate the width and height
+                    rect.width = rect.right - rect.left;
+
+                    // Return the first and last rectanges too, if requested
+                    var ret = {rect: rect};
+                    if (options.first) ret.first = addScroll(r0);
+                    if (options.last) ret.last = addScroll(rlast);
+                    return ret.first || ret.last ? ret : rect;
+                }
+            }
+        }
+    }
+
+    /**
+     * Create an absolutely-positioned element
+     * @param clientRect
+     * @param {boolean} [addScroll=false] Whether to add window.page[XY]Offset
+     * @returns {Element}
+     */
+    function createAbsoluteElement(clientRect, addScroll) {
+        var span = document.createElement('span');
+        span.style.position = 'absolute';
+        span.style.top = clientRect.top + (addScroll ? window.pageYOffset : 0) + 'px';
+        span.style.left = clientRect.left + (addScroll ? window.pageXOffset : 0) + 'px';
+        span.style.width = clientRect.width + 'px';
+        span.style.height = clientRect.height + 'px';
+        return span;
     }
 
     // Main constructor function
@@ -32,181 +106,155 @@
         var instance = this;
 
         // Copy members from the options object to the instance
-        instance.id = options.id || 'selection-menu';
+        instance.id = options.id || 'selection-menu';  // TODO check if reused by multiple menus. Or return the menu from the constructor?
         instance.menuHTML = options.menuHTML;
         instance.minlength = options.minlength || 5;
         instance.maxlength = options.maxlength || Infinity;
         instance.container = options.container;
         instance.handler = options.handler;
         instance.onselect = options.onselect;
+        instance.debug = options.debug;
+
+        // "Private" instance variables
+        instance._span = null;  // a <span> that will roughly cover the selected text, and is destroyed on menu close
+        instance._drop = null;  // HubSpot Drop (popover) object that contains the actual menu; attached to the span
 
         // Initialisation
-        instance.create();
         instance.setupEvents();
     }
 
     SelectionMenu.prototype = {
 
-        create: function () {
-            var instance = this;
-
-            // Create the menu container if necessary
-            if (span) return;
-
-            span = document.createElement('span');
-            span.id = instance.id;
-
-            // Prevent selecting the text of the menu
-            span.style.webkitUserSelect = span.style.webkitTouchCallout = span.style.MozUserSelect = span.style.msUserSelect = 'none';
-            span.setAttribute('unselectable', 'on');  // legacy IE - https://msdn.microsoft.com/en-us/library/hh801966%28v=vs.85%29.aspx
-
-            // Absolute positioning is required
-            span.style.position = 'absolute';
-            span.style.zIndex = 16777271;
+        mouseOnMenu: function (event) {
+            // Is the target element the menu, or contained in it?
+            return this._drop && (event.target === this._drop.content || this._drop.content.contains(event.target));
         },
 
-        // Register the handler for clicks on the menu
-        setupMenuEvents: function () {
+        /**
+         * Show the menu
+         * @param {MouseEvent} event
+         */
+        show: function (event) {
             var instance = this;
 
-            span.addEventListener('click', function (e) {
-                instance.handler.call(instance, e);
-                return false;
-            });
-        },
-
-        // From https://github.com/xdamman/selection-sharer/blob/df6fbba6b49b1b59596fe7bfc5851fc7298c68cf/src/selection-sharer.js#L45
-        selectionDirection: function (selection) {
-            var sel = selection || window.getSelection();
-            if (!sel.anchorNode) return null;
-            var range = document.createRange();
-            range.setStart(sel.anchorNode, sel.anchorOffset);
-            range.setEnd(sel.focusNode, sel.focusOffset);
-            return range.collapsed ? 'backward' : 'forward';
-        },
-
-        insert: function (e) {
-            var instance = this;
+            if (instance._span) return;
 
             // Abort if the mouse event occurred at the menu itself
-            if (mouseOnMenu(e)) return;
+            if (instance.mouseOnMenu(event)) return;
 
             // Get the selected text
             instance.selectedText = window.getSelection().toString();
 
             // Abort if the selected text is too short or too long
             if (instance.selectedText.length < instance.minlength || instance.selectedText.length > instance.maxlength) {
-                instance.hide(e);
                 return;
             }
 
             // Call the onselect handler to give it a chance to modify the menu
-            instance.onselect && instance.onselect.call(instance, e);
+            instance.onselect && instance.onselect.call(instance, event);
 
             // Get the start and end nodes of the selection
-            var range = window.getSelection().getRangeAt(0);
-            var startNode = range.startContainer;
-            var endNode = range.endContainer;
+            var sel = window.getSelection();
+            var range = sel.getRangeAt(0);
 
-            if (!(startNode && endNode && startNode.compareDocumentPosition)) {
-                // Abort if we got bogus values or we can't compare their document position
-                return;
+            // Abort if we got bogus values
+            if (!sel.anchorNode) return;
+
+            // From https://github.com/xdamman/selection-sharer/blob/df6fbba6b49b1b59596fe7bfc5851fc7298c68cf/src/selection-sharer.js#L45
+            // We can't detect backwards selection within the same node with range.endOffset < rangeStartOffset because they're always sorted
+            var rangeTemp = document.createRange();
+            rangeTemp.setStart(sel.anchorNode, sel.anchorOffset);
+            rangeTemp.setEnd(sel.focusNode, sel.focusOffset);
+            instance.selectionDirection = rangeTemp.collapsed ? 'backward' : 'forward';
+            if (instance.debug) console.log('Showing menu for', instance.selectionDirection, 'selection');
+
+            var selRects = getSelectionBoundingRect(sel, {first: true, last: true});
+            instance._span = createAbsoluteElement(selRects.rect);
+            instance._span.style.zIndex = '-99999';
+            document.body.appendChild(instance._span);
+
+            if (instance.debug) {
+                console.log('Appended the overlay span');
+                instance._span.style.backgroundColor = 'yellow';
+                var sfirst = createAbsoluteElement(selRects.first);
+                sfirst.className = 'selection-menu-debug';
+                sfirst.style.backgroundColor = 'green';
+                sfirst.style.zIndex = '-99999';
+                document.body.appendChild(sfirst);
+
+                var slast = createAbsoluteElement(selRects.last);
+                slast.className = 'selection-menu-debug';
+                slast.style.backgroundColor = 'red';
+                slast.style.zIndex = '-99999';
+                document.body.appendChild(slast);
+
+                console.log('Selection.rect:', selRects.rect);
+                console.log('Selection.last:', selRects.last);
             }
 
-            var popoverNode, popoverOffset;
-            if (this.selectionDirection() === 'forward') {
-                popoverNode = endNode;
-                popoverOffset = range.endOffset;
-                // Chrome incorrectly sets the node to the *next* paragraph - https://code.google.com/p/chromium/issues/detail?id=511962
-                console.log('End node and offset:', popoverNode, popoverOffset);
-            } else {
-                popoverNode = startNode;
-                popoverOffset = Math.max(range.startOffset, 0);
-            }
+            // Menu positioning - watch https://github.com/HubSpot/drop/issues/100#issuecomment-122701509 for better options
+            // We're mirroring the out-of-bounds CSS classes for the Drop arrows theme for now
+            // TODO aligns correctly with the span AFTER the first popup is rendered or after scroll, but the first one is 16px off
+            instance._drop = new Drop({
+                target: instance._span,
+                content: instance.menuHTML,
+                classes: 'drop-theme-idr selection-menu',
+                position: instance.selectionDirection === 'forward' ? 'bottom center' : 'top center',
+                tetherOptions: {
+                    targetAttachment: instance.selectionDirection === 'forward' ? 'bottom right' : 'top left',
+                    targetOffset: instance.selectionDirection === 'forward'
+                      ? '0 ' + (selRects.last.right - selRects.rect.right) + 'px'  // the offset isn't flipped - https://github.com/HubSpot/tether/issues/106
+                      : '0 ' + (selRects.first.left - selRects.rect.left) + 'px'
+                },
+                openOn: 'always'
+            });
 
-            // If the end node is an element, use its last text node as the end offset
-            if (popoverNode.nodeType == 1) {
-                popoverNode = popoverNode.lastChild;
-                if (!popoverNode || popoverNode.nodeType != 3) {
-                    return;
-                }
-                popoverOffset = popoverNode.data.length;
-            }
-
-            // Create a new empty Range
-            var newRange = document.createRange();
-
-            // Move the beginning of the new Range to the end of the selection
-            newRange.setStart(popoverNode, popoverOffset);
-
-            // Fill the menu span
-            span.innerHTML = instance.menuHTML;
-
-            // Inject the span element at the start of the new Range
-            newRange.insertNode(span);
-
-            // Menu positioning
-            instance.position();
+            // Register the handler for clicks on the menu
+            instance._drop.content.addEventListener('click', function (e) {
+                instance.handler.call(instance, e);
+                return false;
+            });
         },
 
         setupEvents: function () {
             var instance = this;
-            var container = instance.container;
 
-            // Hide the menu on mouse down *anywhere* because the browser will clear the selection
-            document.body.addEventListener('mousedown', function (e) {
-                instance.hide(e);
+            // Hide the menu on mouse down *anywhere* (not just on the container) because the browser will
+            // clear the selection. This does mean that the library can't support more than one *open* menu
+            // at the same time, but it does support multiple menus as long as only one is open at a time.
+            // Chrome 43 hides the selection inconsistently on mousedown or mouseup:
+            // https://code.google.com/p/chromium/issues/update.do?id=512408
+            document.body.addEventListener('mousedown', function (event) {
+                // Except, don't hide yet if the click occurs on the menu; the caller will
+                if (instance._span && !instance.mouseOnMenu(event)) instance.hide(event);
             });
 
             // Insert the menu on mouseup given some text is selected
-            container.addEventListener('mouseup', function (e) {
-                instance.insert(e);
-
-                // After a delay, check if the text was deselected. This happens if the user
-                // selects with the mouse, extends the selection with the keyboard, then clicks
+            instance.container.addEventListener('mouseup', function (event) {
+                // don't show right on onmouseup because the selection may still be on; wait for things to settle
                 window.setTimeout(function () {
-                    instance.hideIfNoSelection();
+                    instance.show(event);
                 }, 10);
-
             });
-
-            instance.setupMenuEvents();
         },
 
-        hide: function (e, force) {
-            // Abort if an event object was passed and the click hit the menu itself
-            // because the caller should handle clicks and hiding (via the force parameter)
-            if (e && mouseOnMenu(e) && !force) {
-                return;
-            }    
-
-            // Is the element attached to the DOM tree?
-            var parent = span.parentNode;
-            if (parent) {
-                // Remove the element from DOM
-                parent.removeChild(span);
-                // The element object remains in memory and will be reused later
-            }
-            // Clear the selection just in case (e.g. if the user clicked the scrollbar, or a link in a menu that opened a new tab
-            window.getSelection().removeAllRanges();
-        },
-
-        hideIfNoSelection: function () {
+        hide: function (event) {
             var instance = this;
-            var selection = window.getSelection();
-            if (!selection || !selection.toString().length)
-                instance.hide();
-        },
+            if (instance.debug) console.log('Hiding...');
 
-        position: function () {
-            span.style.marginTop = -(span.offsetHeight + 5) + 'px';
-            // TODO: make sure the menu stays wide enough if called near the edge
-/*            span.style.minWidth = 'some invalid value';  // this seems to force a recalculation
-            span.style.minWidth = span.offsetWidth + 'px'; // increases margin values */
-            // TODO move to the left, calculate offsetWidth, move to where it should be
-            // span.style.left = left + 'px';
-            // span.style.display = 'block';
+            // Remove the selection span
+            if (instance._span) {
+                document.body.removeChild(instance._span);
+                instance._span = null;
+            }
+
+            // Remove the HubSpot Drop menu
+            instance._drop && instance._drop.destroy();
+            instance._drop = null;
+            // Clear the selection just in case (e.g. if the user clicked a link in a menu that opened a new tab)
+            window.getSelection().removeAllRanges();
         }
+
     };
 
     // Return the constructor function
