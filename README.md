@@ -7,7 +7,9 @@ This menu may offer a search feature, dictionary lookup, sharing on social media
 
 **[Live Demo](http://idorecall.github.io/selection-menu/)**
 
-Automated cross-browser testing with Selenium driven by Node.js gracefully provided by [BrowserStack](https://www.browserstack.com/automate/node).
+![SelectionMenu screencast](https://cloud.githubusercontent.com/assets/33569/8980688/639a4f74-3667-11e5-9f13-a778a1299f8c.gif)
+
+Automated cross-browser testing with Selenium driven by Node.js gracefully provided by [BrowserStack](https://www.browserstack.com/automate/node) TBI.
 
 
 ## History
