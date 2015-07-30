@@ -20,8 +20,20 @@
 }(this, function () {
 
     /**
+     * @typedef {object} rectangle
+     * @property {number} top
+     * @property {number} right
+     * @property {number} bottom
+     * @property {number} left
+     * @property {number} width
+     * @property {number} height
+     */
+
+    // WebStorm doesn't seem to understand @typedef still - https://youtrack.jetbrains.com/issue/WEB-11189
+
+    /**
      * Add the window scroll position to a rectangle
-     * @param rect
+     * @param {rectangle} rect - The rectangle to add scroll position to.
      * @returns {{top: number, left: number, bottom: number, right: number, width: number, height: number}}
      */
     function addScroll(rect) {
@@ -44,10 +56,17 @@
      * Inspiration: http://stackoverflow.com/questions/6846230/coordinates-of-selected-text-in-browser-page/6847328#6847328
      * See how Selection Range clientRects work at http://codepen.io/dandv/pen/bdxgVj
      * @param sel
-     * @param {object} [options] - Return only the height (shortcuts going through all the rectangles that make uo
-     * the selection.
-     * @returns {object|number} The rectangle or the height
+     * @param {object} [options] - Optional parameter controlling the return of height and first/last rectangles
+     * @param {boolean} [options.justHeight=false] - Return only the height (bypasses going through all the rectangles
+     * that make up the selection)
+     * @param {boolean} [options.first=false] - Return the first rectangle as well, in the `.first` key of an object
+     * that will have `.rect` as well for the entire rectangle
+     * @param {boolean} [options.last=false] - Return the last rectangle as well, in `.last`
+     *
+     * @returns {({{rect: rectangle, first: rectangle, last: rectangle}}|number)} The rectangle(s) or the height
      */
+
+    // Ignore the WebStorm warning - https://youtrack.jetbrains.com/issue/WEB-17506
     function getSelectionBoundingRect(sel, options) {
         sel = sel || window.getSelection();
         if (sel.rangeCount) {
@@ -64,6 +83,7 @@
                     });
                     rect.height = rect.bottom - rect.top;
                     if (options.justHeight) return rect.height;
+
                     // A 3-line selection may start at the last word in the line, continue with a full line, and end
                     // after the first word of the next line. Its width is that of the middle line.
                     for (var i = 1; i < rectangles.length; i++) {
@@ -75,7 +95,7 @@
                     // Finally, calculate the width and height
                     rect.width = rect.right - rect.left;
 
-                    // Return the first and last rectanges too, if requested
+                    // Return the first and last rectangles too, if requested
                     var ret = {rect: rect};
                     if (options.first) ret.first = addScroll(r0);
                     if (options.last) ret.last = addScroll(rlast);
@@ -113,7 +133,7 @@
         instance.container = options.container;
         instance.handler = options.handler;
         instance.onselect = options.onselect;
-        instance.debug = options.debug;
+        instance.debug = options.debug;  // TODO remove debugging after switching from Drop to Tether
 
         // "Private" instance variables
         instance._span = null;  // a <span> that will roughly cover the selected text, and is destroyed on menu close
