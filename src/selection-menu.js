@@ -209,6 +209,9 @@
                 openOn: 'always'
             });
 
+            // Set the id of the menu. TODO is it a good practice to encourage this?
+            instance._drop.content.id = instance.id;
+
             // Register the handler for clicks on the menu
             instance._drop.content.addEventListener('click', function (e) {
                 instance.handler.call(instance, e);
