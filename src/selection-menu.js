@@ -29,12 +29,10 @@
      * @property {number} height
      */
 
-    // WebStorm doesn't seem to understand @typedef still - https://youtrack.jetbrains.com/issue/WEB-11189
-
     /**
      * Add the window scroll position to a rectangle
      * @param {rectangle} rect - The rectangle to add scroll position to.
-     * @returns {{top: number, left: number, bottom: number, right: number, width: number, height: number}}
+     * @returns {rectangle} The rectangle with absolute coordinates relative to the window's top-left corner.
      */
     function addScroll(rect) {
         return {
@@ -63,10 +61,9 @@
      * that will have `.rect` as well for the entire rectangle
      * @param {boolean} [options.last=false] - Return the last rectangle as well, in `.last`
      *
-     * @returns {({{rect: rectangle, first: rectangle, last: rectangle}}|number)} The rectangle(s) or the height
-     */
+     * @returns {{rect: rectangle, first: rectangle, last: rectangle}}|number The rectangle(s) or the height
+     */  // Ignore the WebStorm warning or lack thereof - https://youtrack.jetbrains.com/issue/WEB-17506
 
-    // Ignore the WebStorm warning - https://youtrack.jetbrains.com/issue/WEB-17506
     function getSelectionBoundingRect(sel, options) {
         sel = sel || window.getSelection();
         if (sel.rangeCount) {
