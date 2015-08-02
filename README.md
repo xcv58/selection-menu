@@ -1,4 +1,4 @@
-SelectionMenu [![Build Status](https://travis-ci.org/iDoRecall/selection-menu.svg)](https://travis-ci.org/iDoRecall/selection-menu) ![GitHub license](https://img.shields.io/:license-mit-blue.svg?style=flat)
+SelectionMenu [![Build Status](https://travis-ci.org/iDoRecall/selection-menu.svg)](https://travis-ci.org/iDoRecall/selection-menu) [![Dependency Status](https://david-dm.org/idorecall/selection-menu.svg)](https://david-dm.org/idorecall/selection-menu) [![devDependency Status](https://david-dm.org/idorecall/selection-menu/dev-status.svg)](https://david-dm.org/idorecall/selection-menu#info=devDependencies) ![GitHub license](https://img.shields.io/:license-mit-blue.svg?style=flat)
 =============
 
 SelectionMenu is a small, self-contained, framework-agnostic JavaScript module that displays a custom context menu when the user selects text on the page.

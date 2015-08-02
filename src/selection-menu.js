@@ -10,6 +10,8 @@
  * Inspired by work by Mathias Schäfer (aka molily) - http://github.com/molily/selectionmenu
  */
 
+'use strict';
+
 // https://github.com/umdjs/umd/blob/master/amdWeb.js
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
@@ -42,7 +44,7 @@
             right: rect.right + window.window.pageXOffset,
             width: rect.width,
             height: rect.height
-        }
+        };
     }
 
     /**
@@ -168,11 +170,10 @@
             }
 
             // Call the onselect handler to give it a chance to modify the menu
-            instance.onselect && instance.onselect.call(instance, event);
+            if (instance.onselect) instance.onselect.call(instance, event);
 
             // Get the start and end nodes of the selection
             var sel = window.getSelection();
-            var range = sel.getRangeAt(0);
 
             // Abort if we got bogus values
             if (!sel.anchorNode) return;
@@ -269,8 +270,11 @@
             }
 
             // Remove the HubSpot Drop menu
-            instance._drop && instance._drop.destroy();
-            instance._drop = null;
+            if (instance._drop) {
+                instance._drop.destroy();
+                instance._drop = null;
+            }
+
             // Clear the selection just in case (e.g. if the user clicked a link in a menu that opened a new tab)
             window.getSelection().removeAllRanges();
         }
