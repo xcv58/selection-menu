@@ -1,0 +1,26 @@
+{
+  "name": "selection-menu",
+  "version": "3.1.0",
+  "homepage": "https://github.com/iDoRecall/selection-menu",
+  "description": "Context menu on selection, intelligently positioned",
+  "main": "src/selection-menu.js",
+  "dependencies": {
+    "drop": "^1.2.2"
+  },
+  "keywords": [
+    "selection",
+    "menu",
+    "context"
+  ],
+  "authors": [
+    "Dan Dascalescu (@dandv) for iDoRecall"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
