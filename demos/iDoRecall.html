@@ -21,14 +21,14 @@
 
   .article {
     border: 1px solid red;
-    /* position: absolute; /* so that the selection doesn't extend over the margins; this might confuse Tether/Drop */
   }
   </style>
 
 </head>
 <body>
 
-  <div id="mymenu" hidden>
+  <!-- Pre-load the menu because it loads a custom font, Roboto. Fixes #2. -->
+  <div id="mymenu" class="selection-menu" style="visibility: hidden; position: absolute">
     <ul>
       <li id="idr-home"><a target="IDR" href="https://idorecall.com"><img src="iDR_128x90_light_on_transparent.png"></a></li>
       <li id="create-new-recall" style="padding-left: .5em; padding-right: .5em">Create new <strong>recall</strong></li>
@@ -37,8 +37,8 @@
     </ul>
   </div>
 
-  <script src="//cdn.jsdelivr.net/tether/1.1.0/tether.min.js"></script>
-  <script src="//github.hubspot.com/drop/dist/js/drop.js"></script>
+  <script src="http://cdn.jsdelivr.net/tether/1.1.0/tether.min.js"></script>
+  <script src="http://github.hubspot.com/drop/dist/js/drop.js"></script>
   <script src="../src/selection-menu.js"></script>
 
   <script>
