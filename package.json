@@ -1,6 +1,6 @@
 {
   "name": "selection-menu",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Display a context menu after the user selects text",
   "main": "src/selection-menu.js",
   "scripts": {
@@ -24,8 +24,7 @@
   },
   "homepage": "https://github.com/iDoRecall/selection-menu",
   "dependencies": {
-    "tether": "^1.0.3",
-    "tether-drop": "^1.2.1"
+    "tether": "^1.1.0"
   },
   "devDependencies": {
     "browserstack-webdriver": "^2.41.1"

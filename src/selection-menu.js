@@ -1,5 +1,5 @@
 /**!
- * SelectionMenu 3.1.0
+ * SelectionMenu 3.2.0
  *
  * Displays a context menu when the user selects some text on the page
  * https://github.com/idorecall/selectionmenu
@@ -126,19 +126,36 @@
 
         // Copy members from the options object to the instance
         instance.id = options.id || 'selection-menu';  // TODO check if reused by multiple menus. Or return the menu from the constructor?
-        instance.menuHTML = options.menuHTML;
+        instance.menuHTML = options.menuHTML || typeof options.content === 'string' ? options.content : null;
         instance.minlength = options.minlength || 5;
         instance.maxlength = options.maxlength || Infinity;
         instance.container = options.container;
         instance.handler = options.handler;
         instance.onselect = options.onselect;
-        instance.debug = options.debug;  // TODO remove debugging after switching from Drop to Tether
+        instance.debug = options.debug;  // TODO remove debugging after solving the triple-click Chrome issue
+        instance.showingsCount = 0;
 
         // "Private" instance variables
         instance._span = null;  // a <span> that will roughly cover the selected text, and is destroyed on menu close
-        instance._drop = null;  // HubSpot Drop (popover) object that contains the actual menu; attached to the span
+        instance.tether = null;  // HubSpot Tether DOM element that contains the actual menu; attached to the span
 
-        // Initialisation
+        // Initialization
+        if (instance.menuHTML) {
+            // Deprecated parameter
+            instance.menu = document.createElement('div');  // TODO document + example
+            instance.menu.innerHTML = instance.menuHTML;  // TODO Add test with onselect changing it
+            instance.menu.style.visibility = 'hidden';  // this causes fonts to load; `hidden` or `display: none` don't
+            document.body.appendChild(instance.menu);
+        } else if (options.content instanceof HTMLElement) {
+            instance.menu = options.content;
+        } else {
+            throw 'content must be specified';
+        }
+        instance.menu.className = 'selection-menu';
+        instance.menu.style.position = 'absolute';
+        instance.menu.style.top = '-9999px';  // visibility: hidden still leaves space in the layout
+        instance.menu.style.zIndex = 16777271;
+
         instance.setupEvents();
     }
 
@@ -146,7 +163,7 @@
 
         mouseOnMenu: function (event) {
             // Is the target element the menu, or contained in it?
-            return this._drop && (event.target === this._drop.content || this._drop.content.contains(event.target));
+            return this.tether && (event.target === this.tether.element || this.tether.element.contains(event.target));
         },
 
         /**
@@ -194,47 +211,71 @@
             if (instance.debug) {
                 console.log('Appended the overlay span');
                 instance._span.style.backgroundColor = 'yellow';
-                var sfirst = createAbsoluteElement(selRects.first);
-                sfirst.className = 'selection-menu-debug';
-                sfirst.style.backgroundColor = 'green';
-                sfirst.style.zIndex = '-99999';
-                document.body.appendChild(sfirst);
+                var sFirst = createAbsoluteElement(selRects.first);
+                sFirst.className = 'selection-menu-debug';
+                sFirst.style.backgroundColor = 'green';
+                sFirst.style.zIndex = '-99999';
+                document.body.appendChild(sFirst);
 
-                var slast = createAbsoluteElement(selRects.last);
-                slast.className = 'selection-menu-debug';
-                slast.style.backgroundColor = 'red';
-                slast.style.zIndex = '-99999';
-                document.body.appendChild(slast);
+                var sLast = createAbsoluteElement(selRects.last);
+                sLast.className = 'selection-menu-debug';
+                sLast.style.backgroundColor = 'red';
+                sLast.style.zIndex = '-99999';
+                document.body.appendChild(sLast);
 
                 console.log('Selection.rect:', selRects.rect);
                 console.log('Selection.last:', selRects.last);
             }
 
             // Menu positioning - watch https://github.com/HubSpot/drop/issues/100#issuecomment-122701509 for better options
-            // We're mirroring the out-of-bounds CSS classes for the Drop arrows theme for now
-            // TODO aligns correctly with the span AFTER the first popup is rendered or after scroll, but the first one is 16px off
-            instance._drop = new Drop({
+            // We're mirroring the out-of-bounds CSS classes for the Tether/Drop arrows theme for now
+
+            instance.menu.hidden = false;
+            instance.menu.style.visibility = 'visible';  // TODO add display: block, but what if the display was something else before `none`?
+            instance.tether = new Tether({  // Tether playground: http://jsfiddle.net/dandv/33yndveL/
+                classPrefix: 'tether-smenu',
+                element: instance.menu,
+
+                // TODO Ideally we'd attach to selRects.last, but when flipping due to constraints, the element would
+                // land inside the _span of the selection. Tether doesn't provide events for the element going
+                // out of bounds - https://github.com/HubSpot/tether/issues/103
                 target: instance._span,
-                content: instance.menuHTML,
-                classes: 'drop-theme-idr selection-menu',
-                position: instance.selectionDirection === 'forward' ? 'bottom center' : 'top center',
-                tetherOptions: {
-                    targetAttachment: instance.selectionDirection === 'forward' ? 'bottom right' : 'top left',
-                    targetOffset: instance.selectionDirection === 'forward'
-                      ? '0 ' + (selRects.last.right - selRects.rect.right) + 'px'  // the offset isn't flipped - https://github.com/HubSpot/tether/issues/106
-                      : '0 ' + (selRects.first.left - selRects.rect.left) + 'px'
-                },
-                openOn: 'always'
+                attachment: instance.selectionDirection === 'forward' ? 'top center' : 'bottom center',
+                targetAttachment: instance.selectionDirection === 'forward' ? 'bottom right' : 'top left',
+
+                // Because we couldn't attach to the last selRects, we'll calculate a horizontal offset as if we did attached to selRects.first/last
+                targetOffset: instance.selectionDirection === 'forward'
+                  ? '0 ' + (selRects.last.right - selRects.rect.right) + 'px'  // the offset isn't flipped - https://github.com/HubSpot/tether/issues/106
+                  : '0 ' + (selRects.first.left - selRects.rect.left) + 'px',
+                constraints: [
+                  {
+                    to: 'scrollParent',
+                    attachment: 'together'
+                  },
+                  {
+                    to: 'window',
+                    attachment: 'together'
+                  }
+                ],
+                optimizations: {
+                    // gpu: false,  // linked with the first positioning being 16px off due to the custom font loading - https://github.com/iDoRecall/selection-menu/issues/2 - but disabling this doesn't move the menu on subsequent showings
+                    // moveElement: false,
+                }
             });
 
-            // Set the id of the menu. TODO is it a good practice to encourage this?
-            instance._drop.content.id = instance.id;
+            // Special processing when we first create the tether
+            if (instance.showingsCount++ === 0) {
+                // Reposition the first element because Tether may compute the offset incorrectly, e.g. with the arrows theme
+                // Could be made more robust with a setTimeout if the need arises.
+                instance.tether.position();
 
-            // Register the handler for clicks on the menu
-            instance._drop.content.addEventListener('click', function (e) {
-                instance.handler.call(instance, e);
-                return false;
-            });
+                // Register the handler for clicks on the menu. `element` will be the same across instances.
+                // TODO pre-create the Tether, and only reposition onselect?
+                instance.tether.element.addEventListener('click', function (e) {
+                    instance.handler.call(instance, e);
+                    return false;
+                });
+            }
         },
 
         setupEvents: function () {
@@ -263,16 +304,18 @@
             var instance = this;
             if (instance.debug) console.log('Hiding...');
 
+            instance.menu.hidden = true;
+
             // Remove the selection span
             if (instance._span) {
                 document.body.removeChild(instance._span);
                 instance._span = null;
             }
 
-            // Remove the HubSpot Drop menu
-            if (instance._drop) {
-                instance._drop.destroy();
-                instance._drop = null;
+            // Remove the HubSpot Tether menu
+            if (instance.tether) {
+                instance.tether.destroy();
+                instance.tether = null;
             }
 
             // Clear the selection just in case (e.g. if the user clicked a link in a menu that opened a new tab)

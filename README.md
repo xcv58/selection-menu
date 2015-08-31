@@ -16,7 +16,7 @@ Automated cross-browser testing with Selenium driven by Node.js gracefully provi
 
 The motivation for creating this module was having a sleek contextual selection mechanism in the Chrome extension for [iDoRecall](https://idorecall.com). 
 
-This module was inspired by [Mathias Schäfer's work from 2011](https://github.com/molily/selectionmenu). It was brought up to date with modern browsers (Chrome, Firefox, Safari, Opera, IE9+) and the AMD module pattern, then revamped to use [HubSpot's excellent Drop library](http://github.hubspot.com/drop/) for better positioning. A neat trick, detecting the direction of the selection (forward vs. backward), was inspired by [Xavier Damman](https://github.com/xdamman/)'s [selection-sharer](https://github.com/xdamman/selection-sharer).
+This module was inspired by [Mathias Schäfer's work from 2011](https://github.com/molily/selectionmenu). It was brought up to date with modern browsers (Chrome, Firefox, Safari, Opera, IE9+) and the AMD module pattern, then revamped to use [HubSpot's Tether library](http://github.hubspot.com/tether/) for better positioning. A neat trick, detecting the direction of the selection (forward vs. backward), was inspired by [Xavier Damman](https://github.com/xdamman/)'s [selection-sharer](https://github.com/xdamman/selection-sharer).
 
 The idea and the implementation originally resemble the selection context menu on nytimes.com, but the script is way simpler and easier to integrate. 
 
@@ -43,7 +43,8 @@ Create an instance of SelectionMenu by calling `new SelectionMenu`.
 Pass an object literal with the following options:
 
 * `container` (DOM element): The element where the copy event is observed. Normally that's the main text container.
-* `menuHTML` (string): A string of HTML for the menu e.g. a list of links.
+* `content` (string or DOM element): An HTML string for the menu, or a DOM element containing the menu. If the element was `hidden` or had `display: none`, we'll show and hide it appropriately.
+* `menuHTML` (string): *DEPRECATED* - use `content` instead. A string of HTML for the menu, such as list of links. Typically obtained via `.innerHTML`. TODO or get it from a textarea like Webix
 * `handler` (function): A handler function which is called when the user clicks on the menu. Use the passed click event to access the click link and respond to the user's action.
 * `minlength` (number, optional): Only display the menu if the selected text has at least this length. Defaults to 5 characters.
 * `maxlength` (number, optional): Only display the menu if the selected text is at most this long. Defaults to `Infinity`.
@@ -115,7 +116,7 @@ new SelectionMenu({
 
 ## Browser compatibility
 
-The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html), which is [available in modern browsers](https://developer.mozilla.org/en-US/docs/Web/API/Range): IE9+, Chrome, Firefox, Safari, Opera. HubSpot's Drop library is based on [Tether, which does not support IE8 for good reasons](http://github.hubspot.com/tether/overview/why_we_dont_support_ie_8/).
+The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html), which is [available in modern browsers](https://developer.mozilla.org/en-US/docs/Web/API/Range): IE9+, Chrome, Firefox, Safari, Opera. HubSpot's [Tether library does not support IE8 for good reasons](http://github.hubspot.com/tether/overview/why_we_dont_support_ie_8/).
 
 
 ## Known issues
@@ -130,7 +131,7 @@ The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-R
 ## Upcoming features
 
 * Automatically align left or right the menu arrow if it was created near the left or right border of the container. For now it's always centered.
-* Drop dependency on Drop and use Tether directly
+* Pop up the menu even if the mouseup occurs outside of the container, e.g. if the user drags from the left and releases the button past the right edge of the container
 
 
 ## License and copyright

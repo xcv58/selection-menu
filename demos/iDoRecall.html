@@ -10,14 +10,14 @@
     font: 16px/1.5 arial, sans-serif;
     background: rgb(251, 251, 253);
   }
-  
+
   /* center the text horizontally */
   #wrapper {
     margin: auto;
     max-width: 40em;
     position: relative;
   }
-  
+
 
   .article {
     border: 1px solid red;
@@ -37,17 +37,15 @@
     </ul>
   </div>
 
-  <script src="http://cdn.jsdelivr.net/tether/1.1.0/tether.min.js"></script>
-  <script src="http://github.hubspot.com/drop/dist/js/drop.js"></script>
+  <script src="https://cdn.jsdelivr.net/tether/1.1.0/tether.min.js"></script>
   <script src="../src/selection-menu.js"></script>
 
   <script>
   document.addEventListener('DOMContentLoaded', function () {
-  
+
     new SelectionMenu({
       container: document.querySelector('#wrapper'),
-      id: 'selection-menu',  // TODO do we *need* an id?
-      menuHTML: document.querySelector('#mymenu').innerHTML,
+      content: document.querySelector('#mymenu'),
       handler: function (event) {
         var target = event.target,
           id = target.id || target.parentNode.id,  // for the <strong> in the #create-new-recall
@@ -58,7 +56,7 @@
       },
       debug: false
     });
-  
+
   });
   </script>
   

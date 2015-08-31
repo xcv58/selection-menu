@@ -1,20 +1,18 @@
-/* div. so as not to target the span.selection-menu that Drop creates */
-div.selection-menu {
+.selection-menu {
   font: 20px/100% Roboto, sans-serif;
-  background: #464646;
   color: white;
   text-transform: uppercase;
-  position: relative;
+  position: absolute;
   padding: 0;
   min-width: 388px;
 }
-div.selection-menu img {
+.selection-menu img {
   width: 37px;
 }
-div.selection-menu:hover {
+.selection-menu:hover {
   color: #B3B3B3;
 }
-div.selection-menu ul {
+.selection-menu ul {
   list-style-type: none;
   display: -webkit-box;
   display: -webkit-flex;
@@ -24,7 +22,7 @@ div.selection-menu ul {
   margin: 0;
   padding: 0;
 }
-div.selection-menu li {
+.selection-menu li {
   cursor: pointer;
   display: inline-block;
   padding: .75em 1em;
@@ -33,10 +31,10 @@ div.selection-menu li {
   -webkit-touch-callout: none;
   -moz-user-select: none;
 }
-div.selection-menu li.shortcut {
+.selection-menu li.shortcut {
   font-weight: bold;
 }
-div.selection-menu li:first-child {
+.selection-menu li:first-child {
   border: none;
   padding: 0 .4em;
   /* or padding 0 & margin auto .4em but the hover selection is smaller */
@@ -46,46 +44,32 @@ div.selection-menu li:first-child {
           align-self: center;
   /* For IE10; Chrome acts correctly on margin+padding alone */
 }
-div.selection-menu li a {
+.selection-menu li a {
   display: inline-block;
 }
-div.selection-menu li:hover {
+.selection-menu li:hover {
   background: #3FA9F5;
   color: white;
 }
 /* don't highlight the image */
-div.selection-menu li:first-child:hover {
+.selection-menu li:first-child:hover {
   background: transparent;
 }
-.drop-element,
-.drop-element:after,
-.drop-element:before,
-.drop-element *,
-.drop-element *:after,
-.drop-element *:before {
+.tether-smenu-element,
+.tether-smenu-element:after,
+.tether-smenu-element:before,
+.tether-smenu-element *,
+.tether-smenu-element *:after,
+.tether-smenu-element *:before {
   box-sizing: border-box;
 }
-.drop-element {
-  position: absolute;
-  display: none;
-}
-.drop-element.drop-open {
-  display: block;
-}
-.drop-element.drop-theme-idr {
-  max-width: 100%;
-  max-height: 100%;
-  background: transparent;
-}
-.drop-element.drop-theme-idr .drop-content {
+.tether-smenu-element > * {
   position: relative;
   background: #464646;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
   -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
   filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
 }
-.drop-element.drop-theme-idr .drop-content:before {
+.tether-smenu-element > *:before {
   content: "";
   display: block;
   position: absolute;
@@ -95,102 +79,102 @@ div.selection-menu li:first-child:hover {
   border-width: 16px;
   border-style: solid;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-center .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-center > ul {
   margin-bottom: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-center .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-center > ul:before {
   top: 100%;
   left: 50%;
   margin-left: -16px;
   border-top-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-center .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-center > * {
   margin-top: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-center .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-center > *:before {
   bottom: 100%;
   left: 50%;
   margin-left: -16px;
   border-bottom-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-right.drop-element-attached-middle .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-right.tether-smenu-element-attached-middle > * {
   margin-right: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-right.drop-element-attached-middle .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-right.tether-smenu-element-attached-middle > *:before {
   left: 100%;
   top: 50%;
   margin-top: -16px;
   border-left-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-left.drop-element-attached-middle .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-left.tether-smenu-element-attached-middle > * {
   margin-left: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-left.drop-element-attached-middle .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-left.tether-smenu-element-attached-middle > *:before {
   right: 100%;
   top: 50%;
   margin-top: -16px;
   border-right-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-bottom .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-left.tether-smenu-target-attached-bottom > * {
   margin-top: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-bottom .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-left.tether-smenu-target-attached-bottom > *:before {
   bottom: 100%;
   left: 16px;
   border-bottom-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-bottom .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-right.tether-smenu-target-attached-bottom > * {
   margin-top: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-bottom .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-right.tether-smenu-target-attached-bottom > *:before {
   bottom: 100%;
   right: 16px;
   border-bottom-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-top .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-left.tether-smenu-target-attached-top > * {
   margin-bottom: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-top .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-left.tether-smenu-target-attached-top > *:before {
   top: 100%;
   left: 16px;
   border-top-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-top .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-right.tether-smenu-target-attached-top > * {
   margin-bottom: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-top .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-right.tether-smenu-target-attached-top > *:before {
   top: 100%;
   right: 16px;
   border-top-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-left .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-right.tether-smenu-target-attached-left > * {
   margin-right: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-left .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-right.tether-smenu-target-attached-left > *:before {
   top: 16px;
   left: 100%;
   border-left-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-right .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-left.tether-smenu-target-attached-right > * {
   margin-left: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-right .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-left.tether-smenu-target-attached-right > *:before {
   top: 16px;
   right: 100%;
   border-right-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-left .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-right.tether-smenu-target-attached-left > * {
   margin-right: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-left .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-right.tether-smenu-target-attached-left > *:before {
   bottom: 16px;
   left: 100%;
   border-left-color: #464646;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-right .drop-content {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-left.tether-smenu-target-attached-right > * {
   margin-left: 16px;
 }
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-right .drop-content:before {
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-left.tether-smenu-target-attached-right > *:before {
   bottom: 16px;
   right: 100%;
   border-right-color: #464646;

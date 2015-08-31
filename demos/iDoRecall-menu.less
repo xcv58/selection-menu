@@ -1,14 +1,12 @@
-@arrowSize: 16px;
 @backgroundColor: #464646;
+@arrowSize: 16px;
 
-/* div. so as not to target the span.selection-menu that Drop creates */
-
-div.selection-menu {
+.selection-menu {
     font: 20px/100% Roboto, sans-serif;
-    background: @backgroundColor;
+    // background: @backgroundColor;  // enable if removing the arrows theme
     color: white;
     text-transform: uppercase;
-    position: relative;
+    position: absolute;
     padding: 0;
     min-width: 388px;
 
@@ -21,14 +19,14 @@ div.selection-menu {
     }
 }
 
-div.selection-menu ul {
+.selection-menu ul {
     list-style-type: none;
     display: flex;  /* gets rid of the space between inline-block elements: https://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
     margin: 0;
     padding: 0;
 }
 
-div.selection-menu li {
+.selection-menu li {
     cursor: pointer;
     display: inline-block;
     padding: .75em 1em;
@@ -61,155 +59,144 @@ div.selection-menu li {
 
 
 /* don't highlight the image */
-div.selection-menu li:first-child:hover {
+.selection-menu li:first-child:hover {
     background: transparent;
 }
 
-.drop-element, .drop-element:after, .drop-element:before, .drop-element *, .drop-element *:after, .drop-element *:before {
-  box-sizing: border-box;
+
+// Taken from the arrows theme, https://github.com/HubSpot/tether/blob/master/src/css/helpers/_tether-theme-arrows.sass. Only uses @backgroundColor
+.tether-smenu-element, .tether-smenu-element:after, .tether-smenu-element:before, .tether-smenu-element *, .tether-smenu-element *:after, .tether-smenu-element *:before {
+    box-sizing: border-box;
 }
 
-.drop-element {
-  position: absolute;
-  display: none;
-  &.drop-open {
-    display: block;
-  }
-}
+.tether-smenu-element {
 
-.drop-element.drop-theme-idr {
-  max-width: 100%;
-  max-height: 100%;
-  background: transparent;  // make the @arrowSize-d margins transparent and let the arrows show
-
-  .drop-content {
-    position: relative;
-    background: @backgroundColor;
-    -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-    -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
-            filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
-    &:before {
-      content: "";
-      display: block;
-      position: absolute;
-      width: 0;
-      height: 0;
-      border-color: transparent;
-      border-width: @arrowSize;
-      border-style: solid;
+    > * {
+        position: relative;
+        background: @backgroundColor;
+        -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));  // subtle
+        filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+        &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-color: transparent;
+            border-width: @arrowSize;
+            border-style: solid;
+        }
     }
-  }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-center .drop-content {
-  margin-bottom: @arrowSize;
-  &:before {
-    top: 100%;
-    left: 50%;
-    margin-left: -@arrowSize;
-    border-top-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-center > ul {
+    margin-bottom: @arrowSize;
+    &:before {
+        top: 100%;
+        left: 50%;
+        margin-left: -@arrowSize;
+        border-top-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-center .drop-content {
-  margin-top: @arrowSize;
-  &:before {
-    bottom: 100%;
-    left: 50%;
-    margin-left: -@arrowSize;
-    border-bottom-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-center > * {
+    margin-top: @arrowSize;
+    &:before {
+        bottom: 100%;
+        left: 50%;
+        margin-left: -@arrowSize;
+        border-bottom-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-right.drop-element-attached-middle .drop-content {
-  margin-right: @arrowSize;
-  &:before {
-    left: 100%;
-    top: 50%;
-    margin-top: -@arrowSize;
-    border-left-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-right.tether-smenu-element-attached-middle > * {
+    margin-right: @arrowSize;
+    &:before {
+        left: 100%;
+        top: 50%;
+        margin-top: -@arrowSize;
+        border-left-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-left.drop-element-attached-middle .drop-content {
-  margin-left: @arrowSize;
-  &:before {
-    right: 100%;
-    top: 50%;
-    margin-top: -@arrowSize;
-    border-right-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-left.tether-smenu-element-attached-middle > * {
+    margin-left: @arrowSize;
+    &:before {
+        right: 100%;
+        top: 50%;
+        margin-top: -@arrowSize;
+        border-right-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-bottom .drop-content {
-  margin-top: @arrowSize;
-  &:before {
-    bottom: 100%;
-    left: @arrowSize;
-    border-bottom-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-left.tether-smenu-target-attached-bottom > * {
+    margin-top: @arrowSize;
+    &:before {
+        bottom: 100%;
+        left: @arrowSize;
+        border-bottom-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-bottom .drop-content {
-  margin-top: @arrowSize;
-  &:before {
-    bottom: 100%;
-    right: @arrowSize;
-    border-bottom-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-right.tether-smenu-target-attached-bottom > * {
+    margin-top: @arrowSize;
+    &:before {
+        bottom: 100%;
+        right: @arrowSize;
+        border-bottom-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-top .drop-content {
-  margin-bottom: @arrowSize;
-  &:before {
-    top: 100%;
-    left: @arrowSize;
-    border-top-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-left.tether-smenu-target-attached-top > * {
+    margin-bottom: @arrowSize;
+    &:before {
+        top: 100%;
+        left: @arrowSize;
+        border-top-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-top .drop-content {
-  margin-bottom: @arrowSize;
-  &:before {
-    top: 100%;
-    right: @arrowSize;
-    border-top-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-right.tether-smenu-target-attached-top > * {
+    margin-bottom: @arrowSize;
+    &:before {
+        top: 100%;
+        right: @arrowSize;
+        border-top-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-right.drop-target-attached-left .drop-content {
-  margin-right: @arrowSize;
-  &:before {
-    top: @arrowSize;
-    left: 100%;
-    border-left-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-right.tether-smenu-target-attached-left > * {
+    margin-right: @arrowSize;
+    &:before {
+        top: @arrowSize;
+        left: 100%;
+        border-left-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-top.drop-element-attached-left.drop-target-attached-right .drop-content {
-  margin-left: @arrowSize;
-  &:before {
-    top: @arrowSize;
-    right: 100%;
-    border-right-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-top.tether-smenu-element-attached-left.tether-smenu-target-attached-right > * {
+    margin-left: @arrowSize;
+    &:before {
+        top: @arrowSize;
+        right: 100%;
+        border-right-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-right.drop-target-attached-left .drop-content {
-  margin-right: @arrowSize;
-  &:before {
-    bottom: @arrowSize;
-    left: 100%;
-    border-left-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-right.tether-smenu-target-attached-left > * {
+    margin-right: @arrowSize;
+    &:before {
+        bottom: @arrowSize;
+        left: 100%;
+        border-left-color: @backgroundColor;
+    }
 }
 
-.drop-element.drop-theme-idr.drop-element-attached-bottom.drop-element-attached-left.drop-target-attached-right .drop-content {
-  margin-left: @arrowSize;
-  &:before {
-    bottom: @arrowSize;
-    right: 100%;
-    border-right-color: @backgroundColor;
-  }
+.tether-smenu-element.tether-smenu-element-attached-bottom.tether-smenu-element-attached-left.tether-smenu-target-attached-right > * {
+    margin-left: @arrowSize;
+    &:before {
+        bottom: @arrowSize;
+        right: 100%;
+        border-right-color: @backgroundColor;
+    }
 }
