@@ -24,8 +24,7 @@
   },
   "homepage": "https://github.com/iDoRecall/selection-menu",
   "dependencies": {
-    "tether": "^1.0.3",
-    "tether-drop": "^1.2.1"
+    "tether": "^1.1.0"
   },
   "devDependencies": {
     "browserstack-webdriver": "^2.41.1"
