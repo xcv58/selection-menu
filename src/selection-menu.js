@@ -281,14 +281,17 @@
         setupEvents: function () {
             var instance = this;
 
-            // Hide the menu on mouse down *anywhere* (not just on the container) because the browser will
-            // clear the selection. This does mean that the library can't support more than one *open* menu
-            // at the same time, but it does support multiple menus as long as only one is open at a time.
+            // Hide the menu when the selection is gone. A click anywhere, not just on the container, will do that.
+            // This does mean that the library can't support more than one *open* menu at the same time,
+            // but it does support multiple menus as long as only one is open at a time.
             // Chrome 43 hides the selection inconsistently on mousedown or mouseup:
             // https://code.google.com/p/chromium/issues/update.do?id=512408
-            document.body.addEventListener('mousedown', function (event) {
-                // Except, don't hide yet if the click occurs on the menu; the caller will
-                if (instance._span && !instance.mouseOnMenu(event)) instance.hide(event);
+            // mouseup is better than mousedown because the browser has cleared the selection and we'll detect that.
+            document.body.addEventListener('mouseup', function (event) {
+                // Hide the menu simply when the selection is hidden, regardless of which mouse button was pressed.
+                window.setTimeout(function () {
+                    if (!window.getSelection().toString()) instance.hide();
+                }, 0);
             });
 
             // Insert the menu on mouseup given some text is selected
@@ -300,7 +303,7 @@
             });
         },
 
-        hide: function (event) {
+        hide: function hide(hideSelection) {
             var instance = this;
             if (instance.debug) console.log('Hiding...');
 
@@ -318,8 +321,7 @@
                 instance.tether = null;
             }
 
-            // Clear the selection just in case (e.g. if the user clicked a link in a menu that opened a new tab)
-            window.getSelection().removeAllRanges();
+            if (hideSelection) window.getSelection().removeAllRanges();
         }
 
     };

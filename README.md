@@ -63,6 +63,11 @@ Pass an object literal with the following options:
 The menu styling is completely up to you. See [`selection-menu.css`](demos/gh-pages/selection-menu.css) in the `demos` for a simple example, and [`iDoRecall-menu.less`](demos/iDoRecall-menu.less) for a more complex one.
 
 
+## Methods
+
+* `hide(hideSelection=false)` - hide the menu, optionally hiding the text selection as well. Useful at the end of the click `handler`.
+
+
 ## Example
 
 This observes mouseup events on the element with the ID `article`. It inserts a menu
