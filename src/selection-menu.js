@@ -281,18 +281,20 @@
         setupEvents: function () {
             var instance = this;
 
-            // Hide the menu when the selection is gone. A click anywhere, not just on the container, will do that.
-            // This does mean that the library can't support more than one *open* menu at the same time,
-            // but it does support multiple menus as long as only one is open at a time.
-            // Chrome 43 hides the selection inconsistently on mousedown or mouseup:
-            // https://code.google.com/p/chromium/issues/update.do?id=512408
-            // mouseup is better than mousedown because the browser has cleared the selection and we'll detect that.
-            document.body.addEventListener('mouseup', function (event) {
+            function hideIfNoSelection() {
                 // Hide the menu simply when the selection is hidden, regardless of which mouse button was pressed.
                 window.setTimeout(function () {
                     if (!window.getSelection().toString()) instance.hide();
                 }, 0);
-            });
+            }
+
+            // Hide the menu when the selection is gone. A click anywhere, not just on the container, will do that.
+            // This does mean that the library can't support more than one *open* menu at the same time,
+            // but it does support multiple menus as long as only one is open at a time.
+            // Chrome 43 hides the selection inconsistently on mousedown or mouseup, so we'll intercept both.
+            // https://code.google.com/p/chromium/issues/update.do?id=512408
+            document.body.addEventListener('mousedown', hideIfNoSelection);
+            document.body.addEventListener('mouseup', hideIfNoSelection);
 
             // Insert the menu on mouseup given some text is selected
             instance.container.addEventListener('mouseup', function (event) {
