@@ -23,10 +23,11 @@
   padding: 0;
 }
 .selection-menu li {
+  all: unset;
   cursor: pointer;
   display: inline-block;
-  padding: .75em 1em;
   margin: 0;
+  padding: .75em 1em;
   border-left: 3px solid #666666;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
