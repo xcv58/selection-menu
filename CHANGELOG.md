@@ -1,5 +1,12 @@
 # SelectionMenu changelog
 
+## 2015-09-03, v3.3.0
+
+* handle selection in textareas, though imperfectly without textarea-caret-position
+* reset CSS more robustly with `all: unset`
+* hide the menu according to browser selection clearing vagaries
+
+
 ## 2015-08-30, v3.2.0
 
 * drop dependency on Drop, use Tether directly
