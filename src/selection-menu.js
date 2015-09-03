@@ -99,6 +99,8 @@
                     if (options.first) ret.first = addScroll(r0);
                     if (options.last) ret.last = addScroll(rlast);
                     return ret.first || ret.last ? ret : rect;
+                } else {
+                    // TODO return a rectangle as big as the container?
                 }
             }
         }
@@ -195,16 +197,25 @@
             // Abort if we got bogus values
             if (!sel.anchorNode) return;
 
-            // From https://github.com/xdamman/selection-sharer/blob/df6fbba6b49b1b59596fe7bfc5851fc7298c68cf/src/selection-sharer.js#L45
-            // We can't detect backwards selection within the same node with range.endOffset < rangeStartOffset because they're always sorted
-            var rangeTemp = document.createRange();
-            rangeTemp.setStart(sel.anchorNode, sel.anchorOffset);
-            rangeTemp.setEnd(sel.focusNode, sel.focusOffset);
-            instance.selectionDirection = rangeTemp.collapsed ? 'backward' : 'forward';
-            if (instance.debug) console.log('Showing menu for', instance.selectionDirection, 'selection');
-
-            var selRects = getSelectionBoundingRect(sel, {first: true, last: true});
+            var selRects = {};
+            if (event.target.tagName === 'TEXTAREA') {
+                console.warn('Precise selection menu in textareas reqires textarea-caret-position');
+                selRects.rect = addScroll(event.target.getClientRects()[0]);
+                selRects.first = selRects.last = selRects.rect;
+            } else {
+                // TODO handle contenteditable
+                // From https://github.com/xdamman/selection-sharer/blob/df6fbba6b49b1b59596fe7bfc5851fc7298c68cf/src/selection-sharer.js#L45
+                // We can't detect backwards selection within the same node with range.endOffset < rangeStartOffset because they're always sorted
+                var rangeTemp = document.createRange();
+                rangeTemp.setStart(sel.anchorNode, sel.anchorOffset);
+                rangeTemp.setEnd(sel.focusNode, sel.focusOffset);
+                instance.selectionDirection = rangeTemp.collapsed ? 'backward' : 'forward';
+                if (instance.debug) console.log('Showing menu for', instance.selectionDirection, 'selection');
+                selRects = getSelectionBoundingRect(sel, {first: true, last: true});
+            }
             instance._span = createAbsoluteElement(selRects.rect);
+
+
             instance._span.style.zIndex = '-99999';
             document.body.appendChild(instance._span);
 
