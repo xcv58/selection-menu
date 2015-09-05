@@ -136,6 +136,8 @@
         instance.onselect = options.onselect;
         instance.debug = options.debug;  // TODO remove debugging after solving the triple-click Chrome issue
         instance.showingsCount = 0;
+        instance.selectionStartElement = null;  // Track where the selection started, so that if the user releases the LMB slightly outside the container due to inertia near the edge,
+        instance.selectionEndElement   = null;  // we still pop up the menu - https://github.com/iDoRecall/selection-menu/issues/8
 
         // "Private" instance variables
         instance._span = null;  // a <span> that will roughly cover the selected text, and is destroyed on menu close
@@ -175,35 +177,22 @@
         show: function (event) {
             var instance = this;
 
-            if (instance._span) return;
-
-            // Abort if the mouse event occurred at the menu itself
-            if (instance.mouseOnMenu(event)) return;
-
-            // Get the selected text
-            instance.selectedText = window.getSelection().toString();
-
             // Abort if the selected text is too short or too long
             if (instance.selectedText.length < instance.minlength || instance.selectedText.length > instance.maxlength) {
                 return;
             }
 
-            // Call the onselect handler to give it a chance to modify the menu
-            if (instance.onselect) instance.onselect.call(instance, event);
-
-            // Get the start and end nodes of the selection
-            var sel = window.getSelection();
-
-            // Abort if we got bogus values
-            if (!sel.anchorNode) return;
-
             var selRects = {};
-            if (event.target.tagName === 'TEXTAREA') {
-                console.warn('Precise selection menu in textareas reqires textarea-caret-position');
-                selRects.rect = addScroll(event.target.getClientRects()[0]);
+            if (instance.selectionStartElement.tagName === 'TEXTAREA') {
+                // TODO construct rectangle from caret position in textarea.selectionStart -> textarea.selectionEnd
+                console.log('Precise selection menu in textareas reqires textarea-caret-position');
+                selRects.rect = addScroll(instance.selectionStartElement.getClientRects()[0]);
                 selRects.first = selRects.last = selRects.rect;
             } else {
-                // TODO handle contenteditable
+                // Get the start and end nodes of the selection
+                var sel = window.getSelection();
+                // Abort if we got bogus values
+                if (!sel.anchorNode) return;
                 // From https://github.com/xdamman/selection-sharer/blob/df6fbba6b49b1b59596fe7bfc5851fc7298c68cf/src/selection-sharer.js#L45
                 // We can't detect backwards selection within the same node with range.endOffset < rangeStartOffset because they're always sorted
                 var rangeTemp = document.createRange();
@@ -213,8 +202,12 @@
                 if (instance.debug) console.log('Showing menu for', instance.selectionDirection, 'selection');
                 selRects = getSelectionBoundingRect(sel, {first: true, last: true});
             }
-            instance._span = createAbsoluteElement(selRects.rect);
+            // TODO handle contenteditable
 
+            // Call the onselect handler to give it a chance to modify the menu
+            if (instance.onselect) instance.onselect.call(instance, event);
+
+            instance._span = createAbsoluteElement(selRects.rect);
 
             instance._span.style.zIndex = '-99999';
             document.body.appendChild(instance._span);
@@ -289,31 +282,51 @@
             }
         },
 
+        getSelection: function getSelection(event) {
+            if ('TEXTAREA' === event.target.tagName) {
+                var textarea = event.target;
+                // Save the selected text because clicking on the menu will blur the textarea and reset window.getSelection()
+                // Firefox bug reported in 2001 (!) breaks window.getSelection.() on textareas - https://bugzilla.mozilla.org/show_bug.cgi?id=85686
+                return textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+            } else {
+                return window.getSelection().toString();
+            }
+
+        },
+
         setupEvents: function () {
             var instance = this;
-
-            function hideIfNoSelection() {
-                // Hide the menu simply when the selection is hidden, regardless of which mouse button was pressed.
-                window.setTimeout(function () {
-                    if (!window.getSelection().toString()) instance.hide();
-                }, 0);
-            }
 
             // Hide the menu when the selection is gone. A click anywhere, not just on the container, will do that.
             // This does mean that the library can't support more than one *open* menu at the same time,
             // but it does support multiple menus as long as only one is open at a time.
             // Chrome 43 hides the selection inconsistently on mousedown or mouseup, so we'll intercept both.
             // https://code.google.com/p/chromium/issues/update.do?id=512408
-            document.body.addEventListener('mousedown', hideIfNoSelection);
-            document.body.addEventListener('mouseup', hideIfNoSelection);
-
-            // Insert the menu on mouseup given some text is selected
-            instance.container.addEventListener('mouseup', function (event) {
-                // don't show right on onmouseup because the selection may still be on; wait for things to settle
+            document.body.addEventListener('mousedown', function (event) {
+                instance.selectionStartElement = event.target;
+                // Hide the menu simply when the selection is hidden, regardless of which mouse button was pressed.
                 window.setTimeout(function () {
-                    instance.show(event);
+                    if (!instance.mouseOnMenu(event)) {
+                        instance.selectedText = instance.getSelection(event);
+                        if (!instance.selectedText) instance.hide();
+                    }
+
                 }, 10);
             });
+            document.body.addEventListener('mouseup', function (event) {
+                instance.selectionEndElement = event.target;
+                // Let the menu's onclick execute first (if mouseOnMenu), handling the current selection...
+                window.setTimeout(function () {
+                    // ...then recalculate the selection
+                    instance.selectedText = instance.getSelection(event);
+                    if (!instance.selectedText) return instance.hide();
+                    if (instance.container.contains(instance.selectionStartElement) || instance.container.contains(instance.selectionEndElement)) {
+                        // Only show the menu if the selection started or ended within the container
+                        instance.show(event);
+                    }
+                }, 10);
+            });
+
         },
 
         hide: function hide(hideSelection) {

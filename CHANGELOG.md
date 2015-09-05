@@ -1,5 +1,13 @@
 # SelectionMenu changelog
 
+## 2015-09-04, v3.3.0
+
+* Firefox support for textareas
+* display the menu even if the selection ends outside the container
+* clearer mouse event handling
+* more test cases
+
+
 ## 2015-09-03, v3.3.0
 
 * handle selection in textareas, though imperfectly without textarea-caret-position

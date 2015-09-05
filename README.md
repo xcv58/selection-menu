@@ -126,9 +126,7 @@ The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-R
 
 ## Known issues
 
-* You have to set the `min-width` of the menu manually for now
 * In IE10, double clicking and triple clicking to select a word/paragraph no longer work
-* The first display of the menu is positioned off by 16px, until the user first scrolls - [#2](https://github.com/iDoRecall/selection-menu/issues/2)
 * The menu stays contained between the top and bottom boundaries of the container, but not between the left and right ones - [#3](https://github.com/iDoRecall/selection-menu/issues/3)
 * [Triple clicking to select a paragraph](https://github.com/iDoRecall/selection-menu/issues/1) lands the menu below the selection in Chrome (this is a Chrome bug)
 

@@ -48,10 +48,9 @@
       content: document.querySelector('#mymenu'),
       handler: function (event) {
         var target = event.target,
-          id = target.id || target.parentNode.id,  // for the <strong> in the #create-new-recall
-          selectedText = this.selectedText
+          id = target.id || target.parentNode.id  // for the <strong> in the #create-new-recall
         ;
-        console.log('Handling click on', id);
+        console.log('Handling click on', id, 'with text "' + this.selectedText + '"');
         this.hide(true);
       },
       debug: false
@@ -71,19 +70,27 @@
 
       <p>Notice how the popover menu conveniently appears where you finished the selection.</p>
 
+      <p>When clicking a menu item, the DevTools console will show the handler call result.</p>
+
       <p>Only selections at least 5 characters long trigger the menu. Try double-clicking to select this <i>word</i>.</p>
 
       <h1>More Features</h1>
 
       <p>Select across images and headings to test robustness.</p>
 
-      <img src="https://www.gutenberg.org/cache/epub/1268/pg1268.qrcode.png">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Ile_Mysterieuse_02.jpg/400px-Ile_Mysterieuse_02.jpg">
       
-      <textarea>
+      <textarea rows="5" cols="30">
         Selecting text from a textarea should work too.
       </textarea>
 
-      <p>The menu disappears once you press the left mouse button down, before you release it, if the the browser has cleared the selection.</p>
+      <p>Starting a selection in the textarea and ending it outside is handled properly.</p>
+
+      <p>The menu disappears once you press the left mouse button down, before you release it, if the browser has cleared the selection.</p>
+
+      <p>Select text. Mouse down on the selection, then after a second, mouse up. Both the selection and menu should disappear.</p>
+
+      <p>Double click a word and right click on it. The menu should stay displayed. Don't move the mouse. Left click on the word again. Both the selection and the menu should disappear.</p>
       
       <p>An upcoming feature is to have the popover menu stay within the left and right bounds (red rectangle surrounding this text) as well.</p>
 
@@ -226,6 +233,11 @@
       </p>
     
     </div>
+  </div>
+
+  <div>
+    This text is outside the SelectionMenu container. Selecting text from here won't trigger the menu.
+    But, a selection starting <em>or</em> ending here <em>will</em> trigger the menu.
   </div>
 
 </body>
