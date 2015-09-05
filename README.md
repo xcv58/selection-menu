@@ -63,9 +63,14 @@ Pass an object literal with the following options:
 The menu styling is completely up to you. See [`selection-menu.css`](demos/gh-pages/selection-menu.css) in the `demos` for a simple example, and [`iDoRecall-menu.less`](demos/iDoRecall-menu.less) for a more complex one.
 
 
+## Properties
+
+* `menu` - the menu DOM element that SelectionMenu creates. Modify its innerHTML to adjust the menu on the fly according to the selection.
+
+
 ## Methods
 
-* `hide(hideSelection=false)` - hide the menu, optionally hiding the text selection as well. Useful at the end of the click `handler`.
+* `hide(hideSelection=false)` - hide the menu, optionally clearing the text selection as well. Useful at the end of the click `handler`.
 
 
 ## Example
@@ -128,6 +133,7 @@ The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-R
 
 * The menu stays contained between the top and bottom boundaries of the container, but not between the left and right ones - [#3](https://github.com/iDoRecall/selection-menu/issues/3)
 * [Triple clicking to select a paragraph](https://github.com/iDoRecall/selection-menu/issues/1) lands the menu below the selection in Chrome (this is a Chrome bug)
+* Selecting table cells in Gecko browsers like Firefox doesn't position the menu where the selection has ended, due to [multiple ranges being created](https://developer.mozilla.org/en-US/docs/Web/API/Selection/rangeCount).
 
 
 ## Upcoming features

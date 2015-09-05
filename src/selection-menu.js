@@ -185,6 +185,7 @@
             var selRects = {};
             if (instance.selectionStartElement.tagName === 'TEXTAREA') {
                 // TODO construct rectangle from caret position in textarea.selectionStart -> textarea.selectionEnd
+                // TODO event.target.selectionDirection is provided by the browser
                 console.log('Precise selection menu in textareas reqires textarea-caret-position');
                 selRects.rect = addScroll(instance.selectionStartElement.getClientRects()[0]);
                 selRects.first = selRects.last = selRects.rect;
@@ -236,6 +237,8 @@
 
             instance.menu.hidden = false;
             instance.menu.style.visibility = 'visible';  // TODO add display: block, but what if the display was something else before `none`?
+
+            // TODO if (Tether in Window)
             instance.tether = new Tether({  // Tether playground: http://jsfiddle.net/dandv/33yndveL/
                 classPrefix: 'tether-smenu',
                 element: instance.menu,
@@ -347,7 +350,14 @@
                 instance.tether = null;
             }
 
-            if (hideSelection) window.getSelection().removeAllRanges();
+            // Remove the selection if the browser hasn't removed it (e.g. if clicking on a menu link opens a new tab)...
+            if (hideSelection) {
+                 var selection = window.getSelection();
+                 if (selection && selection.rangeCount > 0 && selection.getRangeAt(0).getClientRects.length > 0) {
+                     // ...  but only if there is one, to avoid this IE bug: http://stackoverflow.com/questions/16160996/could-not-complete-the-operation-due-to-error-800a025e/32409912#32409912
+                     selection.removeAllRanges();
+                 }
+            }
         }
 
     };

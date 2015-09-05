@@ -6,22 +6,29 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="iDoRecall-menu.css">
   <style>
-  body {
-    font: 16px/1.5 arial, sans-serif;
-    background: rgb(251, 251, 253);
-  }
+    body {
+      font: 16px/1.5 arial, sans-serif;
+      background: rgb(251, 251, 253);
+    }
 
-  /* center the text horizontally */
-  #wrapper {
-    margin: auto;
-    max-width: 40em;
-    position: relative;
-  }
+    /* center the text horizontally */
+    #wrapper {
+      margin: auto;
+      max-width: 40em;
+      position: relative;
+    }
+
+    .article {
+      border: 1px solid red;
+    }
+    td {
+      background: lightblue;
+    }
+    caption {
+      background: lightskyblue;
+    }
 
 
-  .article {
-    border: 1px solid red;
-  }
   </style>
 
 </head>
@@ -51,7 +58,7 @@
           id = target.id || target.parentNode.id  // for the <strong> in the #create-new-recall
         ;
         console.log('Handling click on', id, 'with text "' + this.selectedText + '"');
-        this.hide(true);
+        this.hide(true);  // hide the selection after hiding the menu; useful if opening a link in a new tab
       },
       debug: false
     });
@@ -78,7 +85,7 @@
 
       <p>Select across images and headings to test robustness.</p>
 
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Ile_Mysterieuse_02.jpg/400px-Ile_Mysterieuse_02.jpg">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Ile_Mysterieuse_02.jpg/400px-Ile_Mysterieuse_02.jpg" height="300">
       
       <textarea rows="5" cols="30">
         Selecting text from a textarea should work too.
@@ -91,6 +98,17 @@
       <p>Select text. Mouse down on the selection, then after a second, mouse up. Both the selection and menu should disappear.</p>
 
       <p>Double click a word and right click on it. The menu should stay displayed. Don't move the mouse. Left click on the word again. Both the selection and the menu should disappear.</p>
+
+      <table>
+        <caption>Browser support</caption>
+        <tr>
+          <td>Chrome</td><td>Firefox</td><td>Internet Explorer</td><td>Opera</td><td>Safari</td>
+        </tr>
+        </tr>
+          <td>Yes</td><td>Firefox supports <a href="https://developer.mozilla.org/en-US/docs/Web/API/Selection/rangeCount">multiple selections across table cells</a></td><td>Yes</td><td>Yes</td><td>?</td>
+        </tr>
+        </tr>
+      </table>
       
       <p>An upcoming feature is to have the popover menu stay within the left and right bounds (red rectangle surrounding this text) as well.</p>
 
