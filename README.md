@@ -55,7 +55,7 @@ Pass an object literal with the following options:
     new SelectionMenu({
       ...
       onselect: function (e) {
-        this.menuHTML = 'Selection length: ' + this.selectedText.length;
+        this.menu.innerHTML = 'Selection length: ' + this.selectedText.length;
       }
     });
     ```
@@ -78,7 +78,7 @@ looked up on Google or Bing.
 ```js
 new SelectionMenu({
   container: document.getElementById('article'),
-  menuHTML: '<a id="selection-menu-google">Google it</a><a id="selection-menu-bing">Bing</a>',
+  content: '<a id="selection-menu-google">Google it</a><a id="selection-menu-bing">Bing</a>',
   handler: function (e) {
     var target = e.target,
       id = target.id,
@@ -126,7 +126,6 @@ The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-R
 
 ## Known issues
 
-* In IE10, double clicking and triple clicking to select a word/paragraph no longer work
 * The menu stays contained between the top and bottom boundaries of the container, but not between the left and right ones - [#3](https://github.com/iDoRecall/selection-menu/issues/3)
 * [Triple clicking to select a paragraph](https://github.com/iDoRecall/selection-menu/issues/1) lands the menu below the selection in Chrome (this is a Chrome bug)
 
@@ -134,7 +133,6 @@ The script uses the [W3C DOM Range](http://www.w3.org/TR/DOM-Level-2-Traversal-R
 ## Upcoming features
 
 * Automatically align left or right the menu arrow if it was created near the left or right border of the container. For now it's always centered.
-* Pop up the menu even if the mouseup occurs outside of the container, e.g. if the user drags from the left and releases the button past the right edge of the container
 
 
 ## License and copyright
