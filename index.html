@@ -23,22 +23,22 @@
     <script src="src/selection-menu.js"></script>
 
     <script>
-    window.addEventListener('load', function () {
+    window.addEventListener('DOMContentLoaded', function () {
 
       new SelectionMenu({
         container: document.getElementsByClassName('main-content')[0],
         id: 'selection-menu',
-        menuHTML: document.querySelector('#mymenu').innerHTML,
+        content: document.querySelector('#mymenu'),
         onselect: function (e) {
           var truncatedText = this.selectedText.replace(/\s+/g, ' ');
           if (truncatedText.length > 30)
             truncatedText = truncatedText.slice(0, 30) + '...';
 
-          this.menuHTML = this.menuHTML.replace(/ search for .*/g, ' search for <i>' + truncatedText + '</i></a>');
+          this.menu.innerHTML = this.menu.innerHTML.replace(/ search for .*/g, ' search for <i>' + truncatedText + '</i></a>');
         },
         handler: function (e) {
-          var target = e.target || e.srcElement,
-            id = target.id,
+          var target = e.target,
+            id = target.id || target.parentNode.id,  // if clicking on the search text
             selectedText = this.selectedText,
             query = encodeURI(selectedText.replace(/\s/g, '+')),
             searchURI;
@@ -71,28 +71,12 @@
 
       <p>SelectionMenu is a small, self-contained, framework-agnostic JavaScript module that displays a custom context menu when the user selects text on the page.</p>
 
-      <p>Check out the <a href="demos/iDoRecall.html">latest demo</a>.</p>
-      
-      <h3>Old version demoed below</h3>
-
-      <p>The demo below on this page is for the previous version (with imprecise positioning) and it will be updated with the v3 release.</p>
-
-      <p>It does show that you can dynamically alter the menu based on the selection text.</p>
+      <p>The demo on this page shows that you can dynamically alter the menu based on the selection text.</p>
 
       <p>This menu may offer a search feature, dictionary lookup, post to Facebook or similar.</p>
-      
-      <p>Select some text with the mouse or by tapping!</p>
-      
-      <p>Now try selecting the other way (e.g. right to left)!</p>
-      
-      <p>Notice how the popover menu conveniently appears where you finished the selection.</p>
 
-      <p>Only selections at least 5 characters long trigger the menu. Try selecting this <i>word</i>.</p>
+      <p>Check out the <strong><a href="demos/iDoRecall.html">comprehensive demo</a></strong> for more features.</p>
       
-      <h2>Documentation</h2>
-      
-      <p>Please see the README in the GitHub repo.</p>
-
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/iDoRecall/selection-menu">JavaScript context menu on selection</a> is maintained by <a href="https://github.com/iDoRecall">iDoRecall</a>.</span>
 
@@ -104,4 +88,3 @@
 
   </body>
 </html>
-

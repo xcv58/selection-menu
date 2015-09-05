@@ -1,11 +1,6 @@
 /* Example menu styling */
 
-
-/* Global menu styling */
-#selection-menu {
-    /* Position the menu a little to the left of the mouse pointer */
-    margin-left: -25px;
-   
+.selection-menu {
     background: #f8f8f8;
     border: 1px solid #555;
     box-shadow: 1px 1px 4px #aaa;
@@ -13,23 +8,8 @@
 
 }
 
-/* The menu tip */
-#selection-menu:after {
-    content: "\00a0";
-    display: block;
-    position: absolute;
-    bottom: -12px;
-    left: 10px;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    border-width: 6px;
-    border-style: solid;
-    border-color: #555 transparent transparent;
-}
-
 /* Menu item styling */
-#selection-menu a {
+.selection-menu a {
     /* It's important to set the font explicitly, because the user might select heading text, and we don't want heading text font size in the menu */
     font: 1rem arial, sans-serif;
     
@@ -40,10 +20,10 @@
     text-decoration: none;
     cursor: pointer;
 }
-#selection-menu a:last-child {
+.selection-menu a:last-child {
     border-bottom: 0;
 }
 
-#selection-menu a:hover {
+.selection-menu a:hover {
     background: #FBB03B;
 }
