@@ -306,17 +306,16 @@
             // Chrome 43 hides the selection inconsistently on mousedown or mouseup, so we'll intercept both.
             // https://code.google.com/p/chromium/issues/update.do?id=512408
             document.body.addEventListener('mousedown', function (event) {
+                if (instance.mouseOnMenu(event)) return;
                 instance.selectionStartElement = event.target;
                 // Hide the menu simply when the selection is hidden, regardless of which mouse button was pressed.
                 window.setTimeout(function () {
-                    if (!instance.mouseOnMenu(event)) {
-                        instance.selectedText = instance.getSelection(event);
-                        if (!instance.selectedText) instance.hide();
-                    }
-
+                    instance.selectedText = instance.getSelection(event);
+                    if (!instance.selectedText && instance._span) instance.hide();
                 }, 10);
             });
             document.body.addEventListener('mouseup', function (event) {
+                if (instance.mouseOnMenu(event)) return;
                 instance.selectionEndElement = event.target;
                 // Let the menu's onclick execute first (if mouseOnMenu), handling the current selection...
                 window.setTimeout(function () {
@@ -353,7 +352,7 @@
             // Remove the selection if the browser hasn't removed it (e.g. if clicking on a menu link opens a new tab)...
             if (hideSelection) {
                  var selection = window.getSelection();
-                 if (selection && selection.rangeCount > 0 && selection.getRangeAt(0).getClientRects.length > 0) {
+                 if (selection && selection.toString()) {
                      // ...  but only if there is one, to avoid this IE bug: http://stackoverflow.com/questions/16160996/could-not-complete-the-operation-due-to-error-800a025e/32409912#32409912
                      selection.removeAllRanges();
                  }

@@ -66,6 +66,7 @@ The menu styling is completely up to you. See [`selection-menu.css`](demos/gh-pa
 ## Properties
 
 * `menu` - the menu DOM element that SelectionMenu creates. Modify its innerHTML to adjust the menu on the fly according to the selection.
+* `selectionStartElement`, `selectionEndElement` - DOM elements that the selection starts and end with (can be the same)
 
 
 ## Methods

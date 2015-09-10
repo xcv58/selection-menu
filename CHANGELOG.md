@@ -1,6 +1,12 @@
 # SelectionMenu changelog
 
-## 2015-09-04, v3.3.0
+## 2015-09-10, v3.4.1
+
+* return the selection start and end DOM Elements
+* better handling of clicks on the menu
+
+
+## 2015-09-04, v3.4.0
 
 * Firefox support for textareas
 * display the menu even if the selection ends outside the container
