@@ -1,4 +1,6 @@
+.local
 .travis.yml
 bower.json
 .jshintrc
 tests
+test.bat
