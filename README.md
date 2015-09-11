@@ -1,7 +1,14 @@
 # SelectionMenu
-[![Build Status](https://travis-ci.org/iDoRecall/selection-menu.svg)](https://travis-ci.org/iDoRecall/selection-menu) [![Dependency Status](https://david-dm.org/idorecall/selection-menu.svg)](https://david-dm.org/idorecall/selection-menu) [![devDependency Status](https://david-dm.org/idorecall/selection-menu/dev-status.svg)](https://david-dm.org/idorecall/selection-menu#info=devDependencies) ![GitHub license](https://img.shields.io/:license-mit-blue.svg?style=flat)
 
-SelectionMenu is a small, self-contained, framework-agnostic JavaScript module that displays a custom context menu when the user selects text on the page.
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
+[![Dependency Status][david-image]][david-url]
+[![DevDependency Status][david-dev-image]][david-dev-url]
+[![License][license-image]][license-url]
+[![Downloads][downloads-image]][downloads-url]
+
+
+SelectionMenu is a small, framework-agnostic JavaScript module that displays a custom context menu when the user selects text on the page.
 
 This menu may offer a search feature, dictionary lookup, sharing on social media etc.
 
@@ -9,6 +16,7 @@ This menu may offer a search feature, dictionary lookup, sharing on social media
 
 ![SelectionMenu screencast](https://cloud.githubusercontent.com/assets/33569/8980688/639a4f74-3667-11e5-9f13-a778a1299f8c.gif)
 
+The only dependency is [Tether.js](http://github.hubspot.com/tether/) for automatic positioning of the menu as the page is scrolled.
 Automated cross-browser testing with Selenium driven by Node.js gracefully provided by [BrowserStack](https://www.browserstack.com/automate/node) TBI.
 
 
@@ -149,3 +157,18 @@ Maintainer: Dan Dascalescu ([@dandv](https://github.com/dandv))
 Copyright (C) 2015 [iDoRecall](http://idorecall.com), Inc.
 
 The MIT License (MIT)
+
+
+
+[npm-image]: https://img.shields.io/npm/v/selection-menu.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/selection-menu
+[travis-image]: https://img.shields.io/travis/iDoRecall/selection-menu.svg?style=flat-square
+[travis-url]: https://travis-ci.org/iDoRecall/selection-menu
+[david-image]: http://img.shields.io/david/idorecall/selection-menu.svg?style=flat-square
+[david-url]: https://david-dm.org/idorecall/selection-menu
+[david-dev-image]: https://img.shields.io/david/dev/idorecall/selection-menu.svg?style=flat-square
+[david-dev-url]: https://img.shields.io/david/dev/idorecall/selection-menu
+[license-image]: https://img.shields.io/:license-mit-blue.svg?style=flat-square
+[license-url]: LICENSE.md
+[downloads-image]: http://img.shields.io/npm/dm/selection-menu.svg?style=flat-square
+[downloads-url]: https://npmjs.org/package/selection-menu

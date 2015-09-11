@@ -1,6 +1,6 @@
 {
   "name": "selection-menu",
-  "version": "3.4.1",
+  "version": "3.4.2",
   "homepage": "https://github.com/iDoRecall/selection-menu",
   "description": "Context menu on selection, intelligently positioned",
   "main": "src/selection-menu.js",
